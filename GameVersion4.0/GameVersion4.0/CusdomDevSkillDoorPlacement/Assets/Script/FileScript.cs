@@ -7,6 +7,7 @@ using System.Xml;
 using System.ComponentModel;
 using System.Text;
 using System.IO;
+using System.Net;
 using UnityEngine.SceneManagement;
 
 
@@ -246,9 +247,11 @@ public class FileScript : MonoBehaviour
             else
             {
                 Debug.Log("no xml file yet");
+				WebClient web=new WebClient();
+				web.DownloadFile("https://crowdevac.com//var/www/crowdevac/XMLUserData/"+ SceneManager.GetActiveScene().name + ".xml", SceneManager.GetActiveScene().name + ".xml");
                 XmlDocument doc = new XmlDocument();
-                doc.Load("C:\\Users\\Public\\Documents\\Unity Projects\\GameVersion4.0\\CusdomDevSkillDoorPlacement\\Assets\\XMLDocs\\" + SceneManager.GetActiveScene().name + ".xml");
-                XmlNode document = doc.SelectSingleNode("document");
+				doc.Load(SceneManager.GetActiveScene().name + ".xml");
+				XmlNode document = doc.SelectSingleNode("document");
 
                 XmlNode userdata = doc.CreateElement("User-Data");
                 document.AppendChild(userdata);
@@ -469,9 +472,9 @@ public class FileScript : MonoBehaviour
                 XmlNode timenode = doc.CreateElement("Time-Elapsed");
                 timenode.InnerText = ""+GameController.maxTime;
                 userdata.AppendChild(timenode);
-                
-                doc.Save("C:\\Users\\Public\\Documents\\Unity Projects\\GameVersion4.0\\CusdomDevSkillDoorPlacement\\Assets\\XMLDocs\\" + SceneManager.GetActiveScene().name + ".xml");
-            }
+				doc.Save(SceneManager.GetActiveScene().name + ".xml");
+				web.UploadFile ("https://crowdevac.com//var/www/crowdevac/XMLUserData/" + SceneManager.GetActiveScene ().name + ".xml", SceneManager.GetActiveScene ().name + ".xml");
+			 }
         }
     }
 }
