@@ -1,0 +1,47 @@
+Base path: C:/Program Files/Unity/Editor/Data
+Cmd: getPlatforms
+Cmd: preprocess
+  insize=8333 outsize=2044 ok=1
+Cmd: preprocess
+  insize=1063 outsize=406 ok=1
+Cmd: preprocess
+  insize=9575 outsize=798 ok=1
+Cmd: preprocess
+  insize=4159 outsize=1016 ok=1
+Cmd: preprocess
+  insize=1164 outsize=384 ok=1
+Cmd: preprocess
+  error: 2 plat 18 at (40): Can't find include file frag_ao.cginc
+  error: 2 plat 18 at (44): Can't find include file frag_ao.cginc
+  error: 2 plat 18 at (48): Can't find include file frag_ao.cginc
+  error: 2 plat 18 at (52): Can't find include file frag_ao.cginc
+  error: 2 plat 18 at (57): Can't find include file frag_ao.cginc
+  insize=6511 outsize=781 ok=0
+Cmd: preprocess
+  insize=1097 outsize=289 ok=1
+Cmd: preprocess
+  insize=12815 outsize=2575 ok=1
+Cmd: preprocess
+  insize=2235 outsize=619 ok=1
+Cmd: preprocess
+  insize=2238 outsize=949 ok=1
+Cmd: preprocess
+  insize=6131 outsize=973 ok=1
+Cmd: preprocess
+  insize=4770 outsize=1779 ok=1
+Cmd: preprocess
+  insize=4302 outsize=504 ok=1
+Cmd: preprocess
+  insize=11975 outsize=2457 ok=1
+Cmd: preprocess
+  insize=1802 outsize=527 ok=1
+Cmd: preprocess
+  insize=23968 outsize=4108 ok=1
+Cmd: preprocess
+  insize=5171 outsize=737 ok=1
+Cmd: preprocess
+  insize=5717 outsize=1219 ok=1
+Cmd: preprocess
+  insize=799 outsize=276 ok=1
+Cmd: preprocess
+  insize=701 outsize=1507 ok=1
