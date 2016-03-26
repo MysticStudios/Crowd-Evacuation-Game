@@ -39,7 +39,7 @@ public class FileScript : MonoBehaviour
         {
 
             flag = false;
-            if (!File.Exists("C:\\Users\\Public\\Documents\\Unity Projects\\GameVersion4.0\\CusdomDevSkillDoorPlacement\\Assets\\XMLDocs\\" + SceneManager.GetActiveScene().name + ".xml"))
+            /*if (!File.Exists("C:\\Users\\Public\\Documents\\Unity Projects\\GameVersion4.0\\CusdomDevSkillDoorPlacement\\Assets\\XMLDocs\\" + SceneManager.GetActiveScene().name + ".xml"))
             {
                 FileStream s = new FileStream("C:\\Users\\Public\\Documents\\Unity Projects\\GameVersion4.0\\CusdomDevSkillDoorPlacement\\Assets\\XMLDocs\\" + SceneManager.GetActiveScene().name + ".xml", FileMode.Append, FileAccess.Write);
                 XmlTextWriter xwriter = new XmlTextWriter(s, Encoding.UTF8);
@@ -245,10 +245,11 @@ public class FileScript : MonoBehaviour
                 xwriter.Close();
             }
             else
-            {
+            {*/
                 Debug.Log("no xml file yet");
 				WebClient web=new WebClient();
-				web.DownloadFile("https://crowdevac.com//var/www/crowdevac/XMLUserData/"+ SceneManager.GetActiveScene().name + ".xml", SceneManager.GetActiveScene().name + ".xml");
+				web.Credentials = new System.Net.NetworkCredential("username", "password");
+				web.DownloadFile(new Uri("https://crowdevac.com//var/www/crowdevac/XMLUserData/"+ SceneManager.GetActiveScene().name + ".xml"), SceneManager.GetActiveScene().name + ".xml");
                 XmlDocument doc = new XmlDocument();
 				doc.Load(SceneManager.GetActiveScene().name + ".xml");
 				XmlNode document = doc.SelectSingleNode("document");
@@ -473,8 +474,8 @@ public class FileScript : MonoBehaviour
                 timenode.InnerText = ""+GameController.maxTime;
                 userdata.AppendChild(timenode);
 				doc.Save(SceneManager.GetActiveScene().name + ".xml");
-				web.UploadFile ("https://crowdevac.com//var/www/crowdevac/XMLUserData/" + SceneManager.GetActiveScene ().name + ".xml", SceneManager.GetActiveScene ().name + ".xml");
-			 }
+				web.UploadFile ("https://crowdevac.com//var/www/crowdevac/XMLUserData/" + SceneManager.GetActiveScene ().name + ".xml","PUT", SceneManager.GetActiveScene ().name + ".xml");
+			 //}
         }
     }
 }
