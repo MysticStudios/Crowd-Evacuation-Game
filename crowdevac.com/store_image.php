@@ -18,8 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 	fclose($fh);
 	
-	mkdir("./" . $scene,0777);
-	$myFile = "./" . $scene . "/" . $runid . ".png";
+	$sceneFolder = "./heatmap/" . $scene;
+	if (!is_dir($sceneFolder)) {
+    	mkdir($sceneFolder, 0777, true);
+	}
+	$myFile = $sceneFolder . "/" . $runid . ".png";
 	$fh = fopen($myFile, 'w') or die("can't open file");
 	$stringData = $content; //"START:\n" . join(',\n',headerCustom()) . ' \END';
 	fwrite($fh, $stringData);
