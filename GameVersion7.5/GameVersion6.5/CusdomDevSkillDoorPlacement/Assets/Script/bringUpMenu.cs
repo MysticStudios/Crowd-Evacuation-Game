@@ -1094,7 +1094,7 @@ public class bringUpMenu : MonoBehaviour
             }
         }*/
 
-
+		if (!Input.GetKeyDown("space")){
 		GameObject[] objects = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
 
                         foreach (GameObject g in objects)
@@ -1102,11 +1102,12 @@ public class bringUpMenu : MonoBehaviour
                             if (g.tag == "agent")
                             {
                                 g.SetActive(true);
-                                
                             }
                         }
 		
 		walls = GameObject.FindGameObjectsWithTag("wall");
+		
+		
 		foreach(GameObject wall in walls)
 		{
 			if(wall.GetComponent<NewWallScript>()!=null)
@@ -1135,6 +1136,7 @@ public class bringUpMenu : MonoBehaviour
 					agent.GetComponent<NavigationController>().startPosition = new Vector3(wall.transform.position.x+1.0f, wall.transform.position.y, wall.transform.position.z);
 				}
 			}
+		}
 		}
 		GameController.dont = true;
 
