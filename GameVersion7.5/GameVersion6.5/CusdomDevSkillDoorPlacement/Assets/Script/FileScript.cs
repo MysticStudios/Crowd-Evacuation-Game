@@ -18,6 +18,7 @@ public class FileScript : MonoBehaviour
     public static float time;
 	public static bool checkedHM=false;
 	public static bool replayFlag=false;
+	public static bool checkedBHM=false;
     public bool flag;
     bool headFlag = false;
 	public Text mytext;
@@ -79,7 +80,12 @@ public class FileScript : MonoBehaviour
 				XmlNode chm = doc.CreateElement("Checked-Heatmap");
                 chm.InnerText=FileScript.checkedHM.ToString();
                 userdata.AppendChild(chm);
+				FileScript.checkedHM=false;
 
+				XmlNode cbhm = doc.CreateElement("Checked-BestHeatmap");
+                cbhm.InnerText=FileScript.checkedBHM.ToString();
+                userdata.AppendChild(cbhm);
+				
                 XmlNode wallsnode = doc.CreateElement("Walls");
                 userdata.AppendChild(wallsnode);
 

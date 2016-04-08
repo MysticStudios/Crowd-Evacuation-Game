@@ -61,6 +61,7 @@ public class GameController : MonoBehaviour {
         destroyAllObjects();
 		FileScript.checkedHM=false;
 		FileScript.replayFlag=false;
+		FileScript.checkedBHM=false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex+1);
 		
     }

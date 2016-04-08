@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Events;
+using System.Linq;
+using System.Xml;
 
 public class bringUpMenu : MonoBehaviour
 {
@@ -51,6 +53,7 @@ public class bringUpMenu : MonoBehaviour
     public GameObject infoButton;
     public GameObject heatMapButton;
     public GameObject nextLevelButton;
+	public GameObject bestHeatMapButton;
 
     public static bool operating = false;
     //text that show max number of doors and pillars
@@ -163,6 +166,7 @@ public class bringUpMenu : MonoBehaviour
 
         //display heatmap button:
         heatMapButton.SetActive(true);
+		bestHeatMapButton.SetActive(true);
         //display restart button
         restartLevel.SetActive(true);
         //display information button
@@ -240,6 +244,7 @@ public class bringUpMenu : MonoBehaviour
 
         //display heatmap button:
         heatMapButton.SetActive(true);
+		bestHeatMapButton.SetActive(true);
         //display restart button
         restartLevel.SetActive(true);
         //display information button
@@ -253,6 +258,91 @@ public class bringUpMenu : MonoBehaviour
 		FileScript.checkedHM=true;
 		//createPNG();
     }
+	
+	public void displayBestHeatMap()
+	{
+		FileScript.checkedBHM=true;
+		StartCoroutine(getHeatMapData());
+		
+		
+	}
+	
+	IEnumerator getHeatMapData()
+	{
+		float mintime = System.Single.PositiveInfinity;
+		string runId="";
+		
+		string url="http://crowdevac.com/store_data.php?scene="+SceneManager.GetActiveScene().name;  //---live
+		//string url="http://localhost/store_data.php?scene="+SceneManager.GetActiveScene().name;   //---local
+		
+		WWW www = new WWW(url);
+		yield return www;
+		string xml=www.text;
+        XmlDocument doc = new XmlDocument();
+
+            doc.LoadXml(xml);
+
+            foreach(XmlNode node in doc.DocumentElement.ChildNodes)
+            {
+                float nodetime=0.0f;
+                string tempRunId="";
+                foreach (XmlNode cnode in node.ChildNodes)
+                {
+                    if(cnode.Name== "Time-Elapsed")
+                    {
+                        nodetime= System.Single.Parse(cnode.InnerText);
+                    }
+					if(cnode.Name=="Run-ID")
+					{
+						tempRunId=cnode.InnerText;
+					}
+
+                }
+
+                if(nodetime<mintime)
+                {
+                    mintime = nodetime;
+                    runId = tempRunId;
+                }
+
+            }
+		
+		url="http://crowdevac.com/get_image.php?runid="+runId+"&scene="+SceneManager.GetActiveScene().name;  //---live
+		//url="http://localhost/get_image.php?runid="+runId+"&scene="+SceneManager.GetActiveScene().name;   //---local
+		
+		www = new WWW(url);
+		yield return www;
+		
+		
+		//byte[] bytes = new byte[image.Length * sizeof(char)];
+    //System.Buffer.BlockCopy(image.ToCharArray(), 0, bytes, 0, bytes.Length);
+	byte[] bytes = www.bytes;
+	
+	mainCam.transform.localEulerAngles = new Vector3(90f, 270f, 0f);
+        //hide info stuff
+        amountOfPeopleEscaped.gameObject.SetActive(false);
+        amountOfPeopleLeft.gameObject.SetActive(false);
+        totalEscapeTime.gameObject.SetActive(false);
+        averageEscapeTime.gameObject.SetActive(false);
+
+
+
+        //bring up canvas
+
+        //image.SetActive(true);
+        heatMapPlane.SetActive(true);
+        //turn light
+        light.SetActive(false);
+        heatPlane.SetActive(true);
+        //make the heatmap
+        //SpeedAndPosition[] speedPoints = mainCam.GetComponent<collectResults>().speedAndPos.ToArray();
+        //Texture2D tex = Heatmap.CreateHeatmap(points, mainCam, 5);
+        Texture2D tex = new Texture2D(2, 2);
+		tex.LoadImage(bytes);
+        Heatmap.CreateRenderPlane(tex);
+        //points.Clear();
+	
+	}
 
     public void displayInfo()
     {
@@ -316,6 +406,7 @@ public class bringUpMenu : MonoBehaviour
         endGame.SetActive(false);
         midGame.SetActive(false);
         heatMapButton.SetActive(false);
+		bestHeatMapButton.SetActive(false);
         infoButton.SetActive(false);
         restartLevel.SetActive(false);
         nextLevelButton.SetActive(false);
