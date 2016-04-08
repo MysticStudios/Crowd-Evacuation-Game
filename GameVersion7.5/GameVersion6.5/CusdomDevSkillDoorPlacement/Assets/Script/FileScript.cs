@@ -37,7 +37,7 @@ public class FileScript : MonoBehaviour
 
     public void createXML()
     {
-        if (false)//!flag)
+        if (!flag)
         {
 
             flag = true;
