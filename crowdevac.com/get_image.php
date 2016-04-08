@@ -2,16 +2,28 @@
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET')
 {
-	$runID= $_GET["runid"];
-	$scene= $_GET["scene"];
-	$datafile=fopen("./heatmap/".$scene . "/" . $runID . ".png", "rb");
+        if (!isset($_GET['scene']) || empty($_GET['scene'])) {
+                exit(0);
+        }
+        if (!isset($_GET['runid']) || empty($_GET['runid'])) {
+                exit(0);
+        }
 
-	$data=fread($datafile,filesize("./heatmap/".$scene . "/" . $runID . ".png"));
+        $runID = filterAlphanumeric($_GET["runid"]);
+        $scene = filterAlphanumeric($_GET["scene"]);
+        $datafile=fopen("./heatmap/".$scene . "/" . $runID . ".png", "rb");
 
-	fclose($datafile);
-	
-	echo $data;
-	
+        $data=fread($datafile,filesize("./heatmap/".$scene . "/" . $runID . ".png"));
+
+        fclose($datafile);
+        
+        echo $data;
+        
+}
+
+// removes all non-alphanumeric characters
+function filterAlphanumeric($str) {
+        return preg_replace("/[^a-zA-Z0-9]+/", "", $str);
 }
 
 ?>
