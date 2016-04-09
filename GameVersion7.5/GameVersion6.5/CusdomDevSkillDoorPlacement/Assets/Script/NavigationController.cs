@@ -58,7 +58,7 @@ public class NavigationController : MonoBehaviour {
         if (bringUpMenu.running==1)
         {
 
-                if (makeDoor.recomputeFlag)
+                if (makeDoor.recomputeFlag || agent.path.status == NavMeshPathStatus.PathInvalid)
                 {
                     NavMesh.CalculatePath(this.gameObject.transform.position, chosenTarget.position, NavMesh.AllAreas, path);
                     agent.path = path;
