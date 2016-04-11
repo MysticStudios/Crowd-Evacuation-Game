@@ -25,7 +25,7 @@ else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	}
 	
 	$scene = filterAlphanumeric($_POST['scene']);
-	$xmlstring = $_POST['querystring'];
+	$xmlstring = htmlspecialchars($_POST['querystring'], ENT_XML1, 'UTF-8');
 	
 	// create XML file for current scvene if it doesn't yet exist
 	if (!file_exists("./XMLDocs/". $scene . ".xml"))	{
