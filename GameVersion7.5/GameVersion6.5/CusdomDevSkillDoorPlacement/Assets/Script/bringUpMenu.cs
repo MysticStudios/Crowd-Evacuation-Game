@@ -383,6 +383,11 @@ public class bringUpMenu : MonoBehaviour
         GameObject[] doors = GameObject.FindGameObjectsWithTag("door");
         foreach (GameObject door in doors)
         {
+            //door.GetComponent<doorOpeningScript>().enabled = false;
+            if(door.transform.rotation.y<=50)
+            door.transform.eulerAngles = new Vector3(door.transform.rotation.x, 0.0f, door.transform.rotation.z);
+            else
+                door.transform.eulerAngles = new Vector3(door.transform.rotation.x, 90.0f, door.transform.rotation.z);
             DontDestroyOnLoad(door);
         }
         GameObject[] pillars = GameObject.FindGameObjectsWithTag("pillar");
@@ -468,6 +473,7 @@ public class bringUpMenu : MonoBehaviour
 
     void Start()
     {
+
 		subTime=0.0f;
 		timeFlag=false;
 		timeConst=0.0f;
@@ -511,6 +517,7 @@ public class bringUpMenu : MonoBehaviour
         foreach (GameObject d in doors)
         {
             nOfDoors++;
+            //d.GetComponent<doorOpeningScript>().enabled = true;
         }
         Debug.Log("noofdoors" + nOfDoors);
         if (nOfDoors < 0)

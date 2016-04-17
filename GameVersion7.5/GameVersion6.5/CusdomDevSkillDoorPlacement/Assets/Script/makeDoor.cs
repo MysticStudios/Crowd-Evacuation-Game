@@ -7,6 +7,7 @@ public class makeDoor : MonoBehaviour {
     RaycastHit hitInfo = new RaycastHit();
     RaycastHit hit = new RaycastHit();
     Transform temp;
+    Transform childtemp;
     public GameObject door;
     public GameObject rightWall;
     public float WidthOfDoor ;
@@ -56,13 +57,13 @@ public class makeDoor : MonoBehaviour {
                 {
                     transform.gameObject.GetComponent<bringUpMenu>().nOfDoors--;
                     //delete door. make one wall
-      
+                    childtemp = temp.GetChild(0);
                     //vertical
-                    if (temp.rotation.y == 0)
+                    if (childtemp.rotation.y == 0)
                     {
                         //get down wall:
                         GameObject downWall=null;
-                        if (Physics.Raycast(new Vector3(temp.position.x+ WidthOfDoor/2 + .01f, temp.position.y+3f, temp.position.z ), new Vector3(0, -3, 0), out hit))
+                        if (Physics.Raycast(new Vector3(childtemp.position.x+ WidthOfDoor/2 + .01f, childtemp.position.y+3f, childtemp.position.z ), new Vector3(0, -3, 0), out hit))
                         {
                             
                             Transform wall = hit.transform;
@@ -74,7 +75,7 @@ public class makeDoor : MonoBehaviour {
                         }
                         //get UpWall
                         GameObject upWall=null;
-                        if (Physics.Raycast(new Vector3(temp.position.x - WidthOfDoor / 2 - .01f, temp.position.y + 3f, temp.position.z), new Vector3(0, -3, 0), out hit))
+                        if (Physics.Raycast(new Vector3(childtemp.position.x - WidthOfDoor / 2 - .01f, childtemp.position.y + 3f, childtemp.position.z), new Vector3(0, -3, 0), out hit))
                         {
                            
                             Transform wall = hit.transform;
@@ -90,33 +91,37 @@ public class makeDoor : MonoBehaviour {
                             float bottomCoord = downWall.transform.position.x + downWall.transform.localScale.x / 2;
                             float width = Math.Abs(topCoord - bottomCoord);
                             float middle = (topCoord + bottomCoord) / 2;
-                            upWall.transform.position = new Vector3(middle, temp.position.y, temp.position.z);
+                            upWall.transform.position = new Vector3(middle, childtemp.position.y, childtemp.position.z);
                             upWall.transform.localScale = new Vector3(width, wallHeight, .1f);
+                            Destroy(childtemp.gameObject);
                             Destroy(temp.gameObject);
                             Destroy(downWall);
                         }
                        else if(upWall==null && downWall!=null)
                         {
-                            float topCoord = temp.gameObject.transform.position.x - temp.gameObject.transform.localScale.x / 2;
+                            float topCoord = childtemp.gameObject.transform.position.x - childtemp.gameObject.transform.localScale.x / 2;
                             float bottomCoord = downWall.transform.position.x + downWall.transform.localScale.x / 2;
                             float width = Math.Abs(topCoord - bottomCoord);
                             float middle = (topCoord + bottomCoord) / 2;
-                            downWall.transform.position = new Vector3(middle, temp.position.y, temp.position.z);
+                            downWall.transform.position = new Vector3(middle, childtemp.position.y, childtemp.position.z);
                             downWall.transform.localScale = new Vector3(width, wallHeight, .1f);
+                            Destroy(childtemp.gameObject);
                             Destroy(temp.gameObject);
                         }
                         else if(upWall!=null && downWall==null)
                         {
                             float topCoord = upWall.transform.position.x - upWall.transform.localScale.x / 2;
-                            float bottomCoord = temp.gameObject.transform.position.x + temp.gameObject.transform.localScale.x / 2;
+                            float bottomCoord = childtemp.gameObject.transform.position.x + childtemp.gameObject.transform.localScale.x / 2;
                             float width = Math.Abs(topCoord - bottomCoord);
                             float middle = (topCoord + bottomCoord) / 2;
-                            upWall.transform.position = new Vector3(middle, temp.position.y, temp.position.z);
+                            upWall.transform.position = new Vector3(middle, childtemp.position.y, childtemp.position.z);
                             upWall.transform.localScale = new Vector3(width, wallHeight, .1f);
+                            Destroy(childtemp.gameObject);
                             Destroy(temp.gameObject);
                         }
                         else if(upWall==null && downWall==null)
                         {
+                            Destroy(childtemp.gameObject);
                             Destroy(temp.gameObject);
                         }
                         
@@ -126,7 +131,7 @@ public class makeDoor : MonoBehaviour {
                     {
                         //get left wall:
                         GameObject leftWall = null;
-                        if (Physics.Raycast(new Vector3(temp.position.x , temp.position.y + 3f, temp.position.z - WidthOfDoor / 2 -.01f), new Vector3(0, -3, 0), out hit))
+                        if (Physics.Raycast(new Vector3(childtemp.position.x , childtemp.position.y + 3f, childtemp.position.z - WidthOfDoor / 2 -.01f), new Vector3(0, -3, 0), out hit))
                         {
                             Transform wall = hit.transform;
                             if (wall.tag == "wall")
@@ -136,7 +141,7 @@ public class makeDoor : MonoBehaviour {
                         }
                         //get right wall
                         GameObject rightWall = null;
-                        if (Physics.Raycast(new Vector3(temp.position.x , temp.position.y + 3f, temp.position.z + WidthOfDoor / 2+ .01f), new Vector3(0, -3, 0), out hit))
+                        if (Physics.Raycast(new Vector3(childtemp.position.x , childtemp.position.y + 3f, childtemp.position.z + WidthOfDoor / 2+ .01f), new Vector3(0, -3, 0), out hit))
                         {
                             Transform wall = hit.transform;
                             if (wall.tag == "wall")
@@ -154,31 +159,35 @@ public class makeDoor : MonoBehaviour {
                             float middle = (leftCoord + rightCoord) / 2 ;
                             leftWall.transform.position = new Vector3(leftWall.transform.position.x, leftWall.transform.position.y, middle);
                             leftWall.transform.localScale = new Vector3(width, wallHeight, .1f);
+                            Destroy(childtemp.gameObject);
                             Destroy(temp.gameObject);
                             Destroy(rightWall);
                         }
                         else if(leftWall == null && rightWall != null)
                         {
-                            float leftCoord = temp.gameObject.transform.position.z - temp.gameObject.transform.localScale.x / 2;
+                            float leftCoord = childtemp.gameObject.transform.position.z - childtemp.gameObject.transform.localScale.x / 2;
                             float rightCoord = rightWall.transform.position.z + rightWall.transform.localScale.x / 2;
                             float width = Math.Abs(rightCoord - leftCoord);
                             float middle = (leftCoord + rightCoord) / 2;
-                            rightWall.transform.position = new Vector3(temp.gameObject.transform.position.x, temp.gameObject.transform.position.y, middle);
+                            rightWall.transform.position = new Vector3(childtemp.gameObject.transform.position.x, childtemp.gameObject.transform.position.y, middle);
                             rightWall.transform.localScale = new Vector3(width, wallHeight, .1f);
+                            Destroy(childtemp.gameObject);
                             Destroy(temp.gameObject);
                         }
                         else if(leftWall != null && rightWall == null)
                         {
                             float leftCoord = leftWall.transform.position.z - leftWall.transform.localScale.x / 2;
-                            float rightCoord = temp.gameObject.transform.position.z + temp.gameObject.transform.localScale.x / 2;
+                            float rightCoord = childtemp.gameObject.transform.position.z + childtemp.gameObject.transform.localScale.x / 2;
                             float width = Math.Abs(rightCoord - leftCoord);
                             float middle = (leftCoord + rightCoord) / 2;
                             leftWall.transform.position = new Vector3(leftWall.transform.position.x, leftWall.transform.position.y, middle);
                             leftWall.transform.localScale = new Vector3(width, wallHeight, .1f);
+                            Destroy(childtemp.gameObject);
                             Destroy(temp.gameObject);
                         }
                         else if(leftWall == null && rightWall == null)
                         {
+                            Destroy(childtemp.gameObject);
                             Destroy(temp.gameObject);
                         }
                         
@@ -273,9 +282,10 @@ public class makeDoor : MonoBehaviour {
                                     }
                                     //place door
                                     GameObject Doorobj = Instantiate(door);
+                                    Doorobj.SetActive(true);
                                     Doorobj.tag = "door";
-                                    Doorobj.transform.position = new Vector3(hitInfo.point.x, temp.position.y, temp.position.z);
-                                    Doorobj.transform.localScale = new Vector3(WidthOfDoor, wallHeight - .5f, .1f);
+                                    Doorobj.transform.position = new Vector3(hitInfo.point.x+WidthOfDoor/2, temp.position.y, temp.position.z);
+                                    Doorobj.transform.localScale = new Vector3(WidthOfDoor, 1.2f,.1f);
                                     Doorobj.transform.rotation = temp.rotation;
                                     Doorobj.GetComponent<WallsNextToIt>().rightWall = obj;
                                     Doorobj.GetComponent<WallsNextToIt>().leftWall = temp.gameObject;
@@ -322,9 +332,10 @@ public class makeDoor : MonoBehaviour {
                                     }
                                     //place door
                                     GameObject Doorobj = Instantiate(door);
+                                    Doorobj.SetActive(true);
                                     Doorobj.tag = "door";
-                                    Doorobj.transform.position = new Vector3(temp.position.x, temp.position.y, hitInfo.point.z);
-                                    Doorobj.transform.localScale = new Vector3(WidthOfDoor, wallHeight - .5f, .1f);
+                                    Doorobj.transform.position = new Vector3(temp.position.x, temp.position.y, hitInfo.point.z-WidthOfDoor/2);
+                                    Doorobj.transform.localScale = new Vector3(WidthOfDoor, 1.2f, .1f);
                                     Doorobj.transform.rotation = temp.rotation;
                                     Doorobj.GetComponent<WallsNextToIt>().rightWall = obj;
                                     Doorobj.GetComponent<WallsNextToIt>().leftWall = temp.gameObject;
