@@ -21,6 +21,7 @@ public class GameController : MonoBehaviour {
     public static float totalTime = 0f;
     public GameObject mainCam;
     public GameObject FileController;
+	public static bool countFlag=false;
     //public static float maxTime = 0;
 
     void Awake()
@@ -32,6 +33,7 @@ public class GameController : MonoBehaviour {
     }
 
 	void Start () {
+		countFlag=false;
         audio = gameObject.GetComponent<AudioSource>();
         audio.clip = siren;
         startSiren = false;
@@ -188,6 +190,13 @@ public class GameController : MonoBehaviour {
             FileScript.time = bringUpMenu.mytimer;
 			if(!FileController.GetComponent<FileScript>().flag)//XMLXML
             FileController.GetComponent<FileScript>().createXML();//XMLXML
+			
+			if(!countFlag){
+				Debug.Log("hello "+bringUpMenu.subTime);
+				Debug.Log("hellohello "+bringUpMenu.mytimer);
+			bringUpMenu.mytimer = (bringUpMenu.mytimer + bringUpMenu.subTime*20)*0.0165f;
+			countFlag=true;
+			}
             modalPanel.Choice(bringUpMenu.mytimer.ToString(),next,replay,quit);//bringUpMenu.mytimer.ToString()
 
         }

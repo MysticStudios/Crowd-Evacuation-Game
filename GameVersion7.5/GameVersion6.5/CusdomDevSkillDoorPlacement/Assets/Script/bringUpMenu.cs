@@ -78,8 +78,11 @@ public class bringUpMenu : MonoBehaviour
     public Text amountOfPeopleLeft;
     public Text totalEscapeTime;
     public Text averageEscapeTime;
-
+	public static float subTime=0.0f;
 	int timer=0;
+	bool timeFlag=false;
+	public static float timeConst=0.0f;
+	public static float changeTimeConst=0.0f;
 	
     void Awake()
     {
@@ -89,7 +92,7 @@ public class bringUpMenu : MonoBehaviour
         r = new System.Random();
         Cursor.visible = true;
 		timer=0;
-		
+		Time.timeScale=1.0f;
 		
     }
 
@@ -465,6 +468,10 @@ public class bringUpMenu : MonoBehaviour
 
     void Start()
     {
+		subTime=0.0f;
+		timeFlag=false;
+		timeConst=0.0f;
+		changeTimeConst=0.0f;
         //if there are prevwalls, delete all other walls
         GameObject prevwall = GameObject.FindGameObjectWithTag("prevwall");
         if (prevwall != null)
@@ -549,6 +556,12 @@ public class bringUpMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+		if(!timeFlag)
+		{
+			timeConst=Time.deltaTime;
+			Debug.Log("const "+timeConst);
+			timeFlag=true;
+		}
 		timer--;
 		
 		if (timer == 1)
@@ -558,7 +571,24 @@ public class bringUpMenu : MonoBehaviour
         }
         if (setTimer)
         {
-            mytimer = mytimer + 0f + Time.deltaTime;
+				if(Input.GetKey(KeyCode.F))
+				{
+					Time.timeScale=20;
+					Debug.Log("hi "+Time.deltaTime);
+					subTime=subTime+1.0f;
+				}
+				else if(Input.GetKeyUp(KeyCode.F))
+				{
+					
+					Time.timeScale=1.0f;
+					mytimer = mytimer+1.0f;
+					Debug.Log("hello "+Time.deltaTime);
+				}
+				
+				else{
+					Debug.Log("hai "+Time.deltaTime);
+				mytimer = mytimer+1.0f;
+				}
         }
         
         if (Input.GetKeyDown(KeyCode.Escape))
