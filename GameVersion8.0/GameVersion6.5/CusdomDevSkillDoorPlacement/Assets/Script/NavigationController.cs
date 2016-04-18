@@ -59,21 +59,28 @@ public class NavigationController : MonoBehaviour {
         if (bringUpMenu.running==1)
         {
 
-                if (makeDoor.recomputeFlag || agent.path.status == NavMeshPathStatus.PathInvalid|| collided)
+                /*if ((agent.path !=null||agent.path.status==NavMeshPathStatus.PathInvalid) && agent.path.status != NavMeshPathStatus.PathComplete)
                 {
-                    NavMesh.CalculatePath(this.gameObject.transform.position, chosenTarget.position, NavMesh.AllAreas, path);
-                    agent.path = path;
+                Debug.Log("fiesr if " +this.gameObject.name);
+                path = new NavMeshPath();
+                    agent.CalculatePath( chosenTarget.position, path);
                 collided = false;
-                }
+               }
                 else if(path==null)
-                {
-                    agent.SetDestination(chosenTarget.position);
+                {*/
+                Debug.Log("2nd if "+this.gameObject.name);
+                agent.SetDestination(chosenTarget.position);
 
-                }
+            //}
             if (agent.velocity == Vector3.zero)
+            {
                 anim.SetBool("walk", false);
+                path = new NavMeshPath();
+                NavMesh.CalculatePath(this.transform.position,chosenTarget.position,NavMesh.AllAreas,path);
+                agent.SetPath(path);
+            }
             else
-            anim.SetBool("walk", true);
+                anim.SetBool("walk", true);
 
 
         }

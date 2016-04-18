@@ -35,7 +35,7 @@ public class doorOpeningScript : MonoBehaviour {
         {
 
             transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, openRot, Time.deltaTime * 2.0f);
-            transform.GetChild(0).gameObject.GetComponent<NavMeshObstacle>().enabled= true;
+            
 
             Debug.Log(Math.Floor(transform.rotation.y)+" "+ Math.Floor(openRot.y));
 
@@ -44,10 +44,18 @@ public class doorOpeningScript : MonoBehaviour {
         if (Mathf.Abs(transform.eulerAngles.y - openRot.y) <= 1)
         {
             collided = false;
+
+            
+        }
+        if(Mathf.Abs(transform.eulerAngles.y - defaultRot.y) > 1)
+        {
+            transform.GetChild(0).gameObject.GetComponent<NavMeshObstacle>().enabled = true;
+
         }
         if (Mathf.Abs(transform.eulerAngles.y - defaultRot.y) <= 1)
         {
             transform.GetChild(0).gameObject.GetComponent<NavMeshObstacle>().enabled = false;
+
         }
         if (!collided)
         {
