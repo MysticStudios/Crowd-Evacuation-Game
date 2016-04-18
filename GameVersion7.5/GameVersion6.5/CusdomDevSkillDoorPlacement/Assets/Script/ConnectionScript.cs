@@ -11,8 +11,6 @@ public class ConnectionScript : MonoBehaviour {
     public Material trueMatter;
     public static List<Transform> falseListTrans;
 
-
-
     // Use this for initialization
     void Start () {
         notConnected = false;
@@ -84,10 +82,10 @@ public class ConnectionScript : MonoBehaviour {
                             GameObject[] doors = GameObject.FindGameObjectsWithTag("door");
                             foreach (GameObject door in doors)
                             {
-                                float left2 = door.transform.GetChild(0).transform.position.x - door.transform.GetChild(0).transform.localScale.x / 2;
-                                float right2 = door.transform.GetChild(0).transform.position.x + door.transform.GetChild(0).transform.localScale.x / 2;
+                                float left2 = door.transform.position.x - door.transform.localScale.x / 2;
+                                float right2 = door.transform.position.x + door.transform.localScale.x / 2;
 
-                                if ((left >= right2-0.05 && left >= left2) && wall1.transform.position.z == door.transform.GetChild(0).transform.position.z)
+                                if ((left >= right2-0.05 && left >= left2) && wall1.transform.position.z == door.transform.position.z)
                                 {
                                   leftdoorflag = true;
                                   break;
@@ -103,10 +101,10 @@ public class ConnectionScript : MonoBehaviour {
                             foreach (GameObject door in doors)
                             {
 
-                                float left2 = door.transform.GetChild(0).transform.position.x + door.transform.GetChild(0).transform.localScale.x / 2;
-                                float right2 = door.transform.GetChild(0).transform.position.x - door.transform.GetChild(0).transform.localScale.x / 2;
+                                float left2 = door.transform.position.x + door.transform.localScale.x / 2;
+                                float right2 = door.transform.position.x - door.transform.localScale.x / 2;
 
-                                if ((right <= right2+0.05f && right <= left2) && wall1.transform.position.z == door.transform.GetChild(0).transform.position.z)
+                                if ((right <= right2+0.05f && right <= left2) && wall1.transform.position.z == door.transform.position.z)
                                 {
                                     rightDoorFlag = true;
                                     break;
@@ -180,10 +178,10 @@ public class ConnectionScript : MonoBehaviour {
                             GameObject[] doors = GameObject.FindGameObjectsWithTag("door");
                             foreach (GameObject door in doors)
                             {
-                                float left2 = door.transform.GetChild(0).transform.position.z - door.transform.GetChild(0).transform.localScale.x / 2;
-                                float right2 = door.transform.GetChild(0).transform.position.z + door.transform.GetChild(0).transform.localScale.x / 2;
+                                float left2 = door.transform.position.z - door.transform.localScale.x / 2;
+                                float right2 = door.transform.position.z + door.transform.localScale.x / 2;
 
-                                if ((left >= right2-0.05 && left >= left2&&!leftdoorflag) && wall1.transform.position.x == door.transform.GetChild(0).transform.position.x)
+                                if ((left >= right2-0.05 && left >= left2&&!leftdoorflag) && wall1.transform.position.x == door.transform.position.x)
                                 {
                                     leftdoorflag = true;
                                     break;
@@ -199,10 +197,10 @@ public class ConnectionScript : MonoBehaviour {
                             foreach (GameObject door in doors)
                             {
 
-                                float left2 = door.transform.GetChild(0).transform.position.z + door.transform.GetChild(0).transform.localScale.x / 2;
-                                float right2 = door.transform.GetChild(0).transform.position.z - door.transform.GetChild(0).transform.localScale.x / 2;
+                                float left2 = door.transform.position.z + door.transform.localScale.x / 2;
+                                float right2 = door.transform.position.z - door.transform.localScale.x / 2;
 
-                                if ((right <= right2+0.05f && right <= left2&&!rightDoorFlag) && wall1.transform.position.x == door.transform.GetChild(0).transform.position.x)
+                                if ((right <= right2+0.05f && right <= left2&&!rightDoorFlag) && wall1.transform.position.x == door.transform.position.x)
                                 {
                                     rightDoorFlag = true;
                                     break;
