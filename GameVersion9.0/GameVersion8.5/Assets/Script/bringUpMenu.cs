@@ -184,7 +184,7 @@ public class bringUpMenu : MonoBehaviour
 
     public void replayFuction()
     {
-        Debug.Log("we are in the replayfuction");
+        //Debug.Log("we are in the replayfuction");
         //if not running then cant bring up this menu
         if (running == 0)
         {
@@ -361,7 +361,7 @@ public class bringUpMenu : MonoBehaviour
 
     public void actuallyRestart()
    {
-       Debug.Log("We are actualluy restarting");
+      // Debug.Log("We are actualluy restarting");
        FileScript.time = mytimer;
        if (running == 1)
        {
@@ -410,7 +410,7 @@ public class bringUpMenu : MonoBehaviour
 
     public void restartWithSaved()
     {
-        Debug.Log("we are restarting with saved");
+        //Debug.Log("we are restarting with saved");
         running = 0;
 
         //deactivate other menus
@@ -493,7 +493,7 @@ public class bringUpMenu : MonoBehaviour
             {
                 if (w.GetComponent<NewWallScript>() != null)
                 {
-                    Debug.Log("w.GetComponent<NewWallScript>().nOfWalls" + w.GetComponent<NewWallScript>().nOfWalls);
+                    //Debug.Log("w.GetComponent<NewWallScript>().nOfWalls" + w.GetComponent<NewWallScript>().nOfWalls);
                     nOfWalls= w.GetComponent<NewWallScript>().nOfWalls;
                 }else if (w.name == "RightWall"){
 
@@ -506,7 +506,7 @@ public class bringUpMenu : MonoBehaviour
             {
                 if (w.GetComponent<NewWallScript>() != null)
                 {
-                    Debug.Log("w.GetComponent<NewWallScript>().nOfWalls" + w.GetComponent<NewWallScript>().nOfWalls);
+                    //Debug.Log("w.GetComponent<NewWallScript>().nOfWalls" + w.GetComponent<NewWallScript>().nOfWalls);
                     nOfWalls = w.GetComponent<NewWallScript>().nOfWalls;
                 }
                 w.tag = "wall";
@@ -524,7 +524,7 @@ public class bringUpMenu : MonoBehaviour
             nOfDoors++;
             //d.GetComponent<doorOpeningScript>().enabled = true;
         }
-        Debug.Log("noofdoors" + nOfDoors);
+       // Debug.Log("noofdoors" + nOfDoors);
         if (nOfDoors < 0)
         {
 			
@@ -552,7 +552,7 @@ public class bringUpMenu : MonoBehaviour
          outerWall= GameObject.FindGameObjectsWithTag("outerWall");
        // GameObject.FindGameObjectWithTag("agent").SetActive(false);
 
-        GameObject[] walls = GameObject.FindGameObjectsWithTag("wall");
+       /* GameObject[] walls = GameObject.FindGameObjectsWithTag("wall");
         foreach(GameObject wall1 in walls)
         {
             foreach(GameObject wall2 in walls)
@@ -562,7 +562,7 @@ public class bringUpMenu : MonoBehaviour
                     Debug.Log(wall1.transform.position.x + " " + wall1.transform.position.y + " " + wall1.transform.position.z);
                 }
             }
-        }
+        }*/
 }
 
     // Update is called once per frame
@@ -571,7 +571,7 @@ public class bringUpMenu : MonoBehaviour
 		if(!timeFlag)
 		{
 			timeConst=Time.deltaTime;
-			Debug.Log("const "+timeConst);
+			//Debug.Log("const "+timeConst);
 			timeFlag=true;
 		}
 		timer--;
@@ -801,10 +801,9 @@ public class bringUpMenu : MonoBehaviour
         GameObject[] wallFinals = GameObject.FindGameObjectsWithTag("wall");
         foreach(GameObject wallFinal in wallFinals)
         {
-            if(wallFinal.GetComponent<NewWallScript>()!=null)
             wallList.Add(wallFinal.transform);
         }
-
+        Debug.Log(wallList.Count);
         tempListList.Add(wallList);
 
         GameObject[] doorFinals = GameObject.FindGameObjectsWithTag("door");

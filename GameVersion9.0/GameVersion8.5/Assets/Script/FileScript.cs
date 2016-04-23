@@ -111,7 +111,7 @@ public class FileScript : MonoBehaviour
 
             XmlNode wallsnode = doc.CreateElement("Walls");
                 userdata.AppendChild(wallsnode);
-
+            Debug.Log("hey hello " + tempListList[0].Count);
                 foreach(Transform wall in tempListList[0])
                 {
                     XmlNode wallnode = doc.CreateElement("Wall");
