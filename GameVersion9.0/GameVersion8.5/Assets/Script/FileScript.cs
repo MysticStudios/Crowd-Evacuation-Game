@@ -102,7 +102,7 @@ public class FileScript : MonoBehaviour
 
 
             XmlNode loa = doc.CreateElement("LevelOfAggression");
-            cbhm.InnerText = loastr;
+            loa.InnerText = loastr;
             userdata.AppendChild(loa);
 
             XmlNode homo = doc.CreateElement("Homogeneity");
