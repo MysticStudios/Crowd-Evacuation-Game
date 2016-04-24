@@ -37,7 +37,7 @@ public class doorOpeningScript : MonoBehaviour {
             transform.eulerAngles = Vector3.Slerp(transform.eulerAngles, openRot, Time.deltaTime * 2.0f);
             transform.GetChild(0).gameObject.GetComponent<NavMeshObstacle>().enabled= true;
 
-            Debug.Log(Math.Floor(transform.rotation.y)+" "+ Math.Floor(openRot.y));
+            //Debug.Log(Math.Floor(transform.rotation.y)+" "+ Math.Floor(openRot.y));
 
         }
 

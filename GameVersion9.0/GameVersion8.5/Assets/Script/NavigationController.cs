@@ -241,9 +241,10 @@ public class NavigationController : MonoBehaviour {
 
             if (Vector3.Distance(chosenTarget.position, this.gameObject.transform.position) <= 2)
             {
-                GameController.totalTime += this.gameObject.GetComponent<timer>().time;
-                //bringUpMenu.setTimer = false;
-                this.gameObject.SetActive(false);
+                //GameController.totalTime += this.gameObject.GetComponent<timer>().time;
+            //bringUpMenu.setTimer = false;
+            GameController.totalTime = GameController.totalTime + ((this.GetComponent<timer>().time + (this.GetComponent<timer>().subtime*10)) * 0.0165f);
+            this.gameObject.SetActive(false);
             }
             
 
@@ -292,7 +293,7 @@ public class NavigationController : MonoBehaviour {
         }*/
         if(loa.Equals("Low"))
         {
-            Debug.Log("lowloa");
+           // Debug.Log("lowloa");
             if (speedValue <= .7f)
             {
                 navMeshComponent.speed = 3f + 4 * speedValue;//2-5
@@ -318,7 +319,7 @@ public class NavigationController : MonoBehaviour {
         }
         else if(loa.Equals("Medium"))
         {
-            Debug.Log("medloa");
+           // Debug.Log("medloa");
             if (speedValue <= .5f)
             {
                 navMeshComponent.speed = 3f + 4 * speedValue;//2-5
@@ -343,7 +344,7 @@ public class NavigationController : MonoBehaviour {
         }
         else
         {
-            Debug.Log("highloa");
+           // Debug.Log("highloa");
             if (speedValue <= .3f)
             {
                 navMeshComponent.speed = 3f + 4 * speedValue;//2-5
@@ -370,7 +371,7 @@ public class NavigationController : MonoBehaviour {
 
         if(homog.Equals("Low"))
         {
-            Debug.Log("homolow");
+           // Debug.Log("homolow");
             //figure out agent height
             navMeshComponent.height = 1.7f;
             float heightValue = UnityEngine.Random.value;
@@ -385,7 +386,7 @@ public class NavigationController : MonoBehaviour {
         }
         else if(homog.Equals("Medium"))
         {
-            Debug.Log("homomed");
+            //Debug.Log("homomed");
             //figure out agent height
             navMeshComponent.height = 1.7f;
             float heightValue = UnityEngine.Random.value;

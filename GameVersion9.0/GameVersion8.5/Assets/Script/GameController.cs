@@ -201,9 +201,9 @@ public class GameController : MonoBehaviour {
             FileController.GetComponent<FileScript>().createXML();//XMLXML
 			
 			if(!countFlag){
-				Debug.Log("hello "+bringUpMenu.subTime);
-				Debug.Log("hellohello "+bringUpMenu.mytimer);
-			bringUpMenu.mytimer = (bringUpMenu.mytimer + bringUpMenu.subTime*20)*0.0165f;
+				// Debug.Log("hello "+bringUpMenu.subTime);
+				//Debug.Log("hellohello "+bringUpMenu.mytimer);
+			bringUpMenu.mytimer = (bringUpMenu.mytimer + bringUpMenu.subTime*10)*0.0165f;
 			countFlag=true;
 			}
             modalPanel.Choice(bringUpMenu.mytimer.ToString(),next,replay,quit);//bringUpMenu.mytimer.ToString()
