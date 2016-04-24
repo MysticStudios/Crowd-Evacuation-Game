@@ -1091,6 +1091,7 @@ public class bringUpMenu : MonoBehaviour
         
         if(los.Contains("A"))
         {
+            lowercount= Convert.ToInt32(0.20 * planearea);
             uppercount = Convert.ToInt32(0.27 * planearea);
         }
         else if(los.Contains("B"))
