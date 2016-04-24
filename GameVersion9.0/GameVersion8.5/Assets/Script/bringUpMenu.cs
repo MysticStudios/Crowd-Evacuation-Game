@@ -265,6 +265,8 @@ public class bringUpMenu : MonoBehaviour
     public void displayHeatMap()
     {
         //put heatmap stuff in here
+		showAllUsersItems();
+		destroyAllBestHeatmapItems();
         ShowHeatMap();
 		FileScript.checkedHM=true;
 		//createPNG();
@@ -273,11 +275,78 @@ public class bringUpMenu : MonoBehaviour
 	public void displayBestHeatMap()
 	{
 		FileScript.checkedBHM=true;
+		hideAllUsersItems();
+		destroyAllBestHeatmapItems();
 		StartCoroutine(getHeatMapData());
-		
-		
 	}
 	
+	public void hideAllUsersItems() {
+		// hide all existing walls, doors, and pillars
+		GameObject[] allWalls = GameObject.FindGameObjectsWithTag("wall");
+		foreach (GameObject wall1 in allWalls) {
+			//if (wall1.GetComponent<NewWallScript> () != null) {
+			MeshRenderer render = wall1.gameObject.GetComponentInChildren<MeshRenderer>();
+			render.enabled = false;
+			//}
+		}
+		GameObject[] allDoors = GameObject.FindGameObjectsWithTag("door");
+		foreach (GameObject door1 in allDoors) {
+			MeshRenderer render = door1.gameObject.GetComponentInChildren<MeshRenderer>();
+			if (render != null) {
+				render.enabled = false;
+			}
+		}
+		GameObject[] allPillars = GameObject.FindGameObjectsWithTag("pillar");
+		foreach (GameObject pillar1 in allPillars) {
+			MeshRenderer render = pillar1.gameObject.GetComponentInChildren<MeshRenderer>();
+			render.enabled = false;
+		}
+	}
+
+	public void showAllUsersItems() {
+		// show all existing walls, doors, and pillars
+		GameObject[] allWalls = GameObject.FindGameObjectsWithTag("wall");
+		foreach (GameObject wall1 in allWalls) {
+			//if (wall1.GetComponent<NewWallScript> () != null) {
+			MeshRenderer render = wall1.gameObject.GetComponentInChildren<MeshRenderer>();
+			render.enabled = true;
+			//}
+		}
+		GameObject[] allDoors = GameObject.FindGameObjectsWithTag("door");
+		foreach (GameObject door1 in allDoors) {
+			MeshRenderer render = door1.gameObject.GetComponentInChildren<MeshRenderer>();
+			if (render != null) {
+				render.enabled = true;
+			}
+		}
+		GameObject[] allPillars = GameObject.FindGameObjectsWithTag("pillar");
+		foreach (GameObject pillar1 in allPillars) {
+			MeshRenderer render = pillar1.gameObject.GetComponentInChildren<MeshRenderer>();
+			render.enabled = true;
+		}
+	}
+
+	public void destroyAllBestHeatmapItems() {
+		GameObject[] allWalls = GameObject.FindGameObjectsWithTag("wall");
+		foreach (GameObject wall1 in allWalls) {
+			if (wall1.name == "besthmWall") {
+				Destroy (wall1);
+			}
+		}
+		GameObject[] allDoors = GameObject.FindGameObjectsWithTag("door");
+		foreach (GameObject door1 in allDoors) {
+			if (door1.name == "besthmDoor") {
+				Destroy (door1);
+			}
+		}
+		GameObject[] allPillars = GameObject.FindGameObjectsWithTag("pillar");
+		foreach (GameObject pillar1 in allPillars) {
+			if (pillar1.name == "besthmPillar") {
+				Destroy (pillar1);
+			}
+		}
+	}
+
 	IEnumerator getHeatMapData()
 	{
 		float mintime = System.Single.PositiveInfinity;
@@ -290,34 +359,239 @@ public class bringUpMenu : MonoBehaviour
 		yield return www;
 		string xml=www.text;
         XmlDocument doc = new XmlDocument();
+		XmlNode wallsXML = null;
 
-            doc.LoadXml(xml);
+        doc.LoadXml(xml);
 
-            foreach(XmlNode node in doc.DocumentElement.ChildNodes)
+        foreach(XmlNode node in doc.DocumentElement.ChildNodes)
+        {
+			if (wallsXML == null) {
+				wallsXML = node;
+			}
+
+            float nodetime=0.0f;
+            string tempRunId="";
+            foreach (XmlNode cnode in node.ChildNodes)
             {
-                float nodetime=0.0f;
-                string tempRunId="";
-                foreach (XmlNode cnode in node.ChildNodes)
+                if(cnode.Name== "Time-Elapsed")
                 {
-                    if(cnode.Name== "Time-Elapsed")
-                    {
-                        nodetime= System.Single.Parse(cnode.InnerText);
-                    }
-					if(cnode.Name=="Run-ID")
-					{
-						tempRunId=cnode.InnerText;
-					}
-
+                    nodetime= System.Single.Parse(cnode.InnerText);
                 }
-
-                if(nodetime<mintime)
-                {
-                    mintime = nodetime;
-                    runId = tempRunId;
-                }
+				if(cnode.Name=="Run-ID")
+				{
+					tempRunId=cnode.InnerText;
+				}
 
             }
+
+            if(nodetime<mintime)
+            {
+                mintime = nodetime;
+                runId = tempRunId;
+				wallsXML = node;
+            }
+
+        }
 		
+		foreach(XmlNode node in wallsXML)
+		{
+			if (node.Name == "Walls") {
+				// for each wall
+				foreach (XmlNode cnode in node.ChildNodes) {
+					GameObject Wallobj = GameObject.CreatePrimitive (PrimitiveType.Cube);
+					Wallobj.name = "besthmWall";
+					Wallobj.tag = "wall";
+					Wallobj.GetComponent<Renderer>().material.color = new Color(177F/255F, 229F/255F, 229F/255F, 30F/255F);
+					// for each wall info (Position, Rotation, Scale)
+					foreach (XmlNode transformInfo in cnode.ChildNodes) {
+						float X = 0;
+						float Y = 0;
+						float Z = 0;
+
+						if (transformInfo.Name == "Position") {
+							foreach (XmlNode transformInfoVariable in transformInfo.ChildNodes) {
+								if (transformInfoVariable.Name == "X") {
+									X = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Y") {
+									Y = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Z") {
+									Z = float.Parse(transformInfoVariable.InnerText);
+								}
+							}
+							Wallobj.transform.position = new Vector3 (X,Y,Z);
+						}
+						if (transformInfo.Name == "Rotation") {
+							foreach (XmlNode transformInfoVariable in transformInfo.ChildNodes) {
+								if (transformInfoVariable.Name == "X") {
+									X = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Y") {
+									Y = float.Parse(transformInfoVariable.InnerText);
+
+									if (Y > .001) {
+										Y = 90;
+									}
+								}
+								if (transformInfoVariable.Name == "Z") {
+									Z = float.Parse(transformInfoVariable.InnerText);
+								}
+							}
+
+							Wallobj.transform.eulerAngles = new Vector3 (X, Y, Z);
+							//Wallobj.transform.rotation = Quaternion.Euler(X, Y, Z);
+						}
+						if (transformInfo.Name == "Scale") {
+							foreach (XmlNode transformInfoVariable in transformInfo.ChildNodes) {
+								if (transformInfoVariable.Name == "X") {
+									X = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Y") {
+									Y = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Z") {
+									Z = float.Parse(transformInfoVariable.InnerText);
+								}
+							}
+							Wallobj.transform.localScale = new Vector3 (X,Y,Z);
+						}
+					}
+
+					Wallobj.SetActive(true);
+				}
+			}
+			if (node.Name == "Doors") {
+				// for each door
+				/*foreach (XmlNode cnode in node.ChildNodes) {
+                    GameObject doortmp = new GameObject();
+                    GameObject Doorobj = Instantiate(doortmp);
+                    Doorobj.name = "besthmDoor";
+                    Doorobj.tag = "door";
+
+                    // for each door info (Position, Rotation, Scale)
+                    foreach (XmlNode transformInfo in cnode.ChildNodes) {
+                        float X = 0;
+                        float Y = 0;
+                        float Z = 0;
+
+                        if (transformInfo.Name == "Position") {
+                            foreach (XmlNode transformInfoVariable in transformInfo.ChildNodes) {
+                                if (transformInfoVariable.Name == "X") {
+                                    X = float.Parse(transformInfoVariable.InnerText);
+                                }
+                                if (transformInfoVariable.Name == "Y") {
+                                    Y = float.Parse(transformInfoVariable.InnerText);
+                                }
+                                if (transformInfoVariable.Name == "Z") {
+                                    Z = float.Parse(transformInfoVariable.InnerText);
+                                }
+                            }
+                            Doorobj.transform.position = new Vector3 (X,Y,Z);
+                        }
+                        if (transformInfo.Name == "Rotation") {
+                            foreach (XmlNode transformInfoVariable in transformInfo.ChildNodes) {
+                                if (transformInfoVariable.Name == "X") {
+                                    X = float.Parse(transformInfoVariable.InnerText);
+                                }
+                                if (transformInfoVariable.Name == "Y") {
+                                    Y = float.Parse(transformInfoVariable.InnerText);
+
+                                    if (Y > .001) {
+                                        Y = 90;
+                                    }
+                                }
+                                if (transformInfoVariable.Name == "Z") {
+                                    Z = float.Parse(transformInfoVariable.InnerText);
+                                }
+                            }
+                            Doorobj.transform.rotation = Quaternion.Euler(X, Y, Z);
+                        }
+                        if (transformInfo.Name == "Scale") {
+                            foreach (XmlNode transformInfoVariable in transformInfo.ChildNodes) {
+                                if (transformInfoVariable.Name == "X") {
+                                    X = float.Parse(transformInfoVariable.InnerText);
+                                }
+                                if (transformInfoVariable.Name == "Y") {
+                                    Y = float.Parse(transformInfoVariable.InnerText);
+                                }
+                                if (transformInfoVariable.Name == "Z") {
+                                    Z = float.Parse(transformInfoVariable.InnerText);
+                                }
+                            }
+                            Doorobj.transform.localScale = new Vector3 (X,Y,Z);
+                        }
+                    }
+                    Doorobj.SetActive(true);
+                    //tempDoors.Add(Doorobj);
+                }*/
+			}
+			if (node.Name == "Pillars") {
+				// for each pillar
+				foreach (XmlNode cnode in node.ChildNodes) {
+					GameObject Pillarobj = GameObject.CreatePrimitive (PrimitiveType.Cylinder);
+					Pillarobj.name = "besthmPillar";
+					Pillarobj.tag = "pillar";
+					Pillarobj.GetComponent<Renderer>().material.color = new Color(0F, 0F, 0F);
+
+					// for each door info (Position, Rotation, Scale)
+					foreach (XmlNode transformInfo in cnode.ChildNodes) {
+						float X = 0;
+						float Y = 0;
+						float Z = 0;
+
+						if (transformInfo.Name == "Position") {
+							foreach (XmlNode transformInfoVariable in transformInfo.ChildNodes) {
+								if (transformInfoVariable.Name == "X") {
+									X = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Y") {
+									Y = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Z") {
+									Z = float.Parse(transformInfoVariable.InnerText);
+								}
+							}
+							Pillarobj.transform.position = new Vector3 (X,Y,Z);
+						}
+						if (transformInfo.Name == "Rotation") {
+							foreach (XmlNode transformInfoVariable in transformInfo.ChildNodes) {
+								if (transformInfoVariable.Name == "X") {
+									X = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Y") {
+									Y = float.Parse(transformInfoVariable.InnerText);
+
+									if (Y > .001) {
+										Y = 90;
+									}
+								}
+								if (transformInfoVariable.Name == "Z") {
+									Z = float.Parse(transformInfoVariable.InnerText);
+								}
+							}
+							Pillarobj.transform.rotation = Quaternion.Euler(X, Y, Z);
+						}
+						if (transformInfo.Name == "Scale") {
+							foreach (XmlNode transformInfoVariable in transformInfo.ChildNodes) {
+								if (transformInfoVariable.Name == "X") {
+									X = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Y") {
+									Y = float.Parse(transformInfoVariable.InnerText);
+								}
+								if (transformInfoVariable.Name == "Z") {
+									Z = float.Parse(transformInfoVariable.InnerText);
+								}
+							}
+							Pillarobj.transform.localScale = new Vector3 (X,Y,Z);
+						}
+					}
+					Pillarobj.SetActive(true);
+				}
+			}
+		}
+
 		url="http://crowdevac.com/get_image.php?runid="+runId+"&scene="+SceneManager.GetActiveScene().name;  //---live
 		//url="http://localhost/get_image.php?runid="+runId+"&scene="+SceneManager.GetActiveScene().name;   //---local
 		
@@ -326,10 +600,10 @@ public class bringUpMenu : MonoBehaviour
 		
 		
 		//byte[] bytes = new byte[image.Length * sizeof(char)];
-    //System.Buffer.BlockCopy(image.ToCharArray(), 0, bytes, 0, bytes.Length);
-	byte[] bytes = www.bytes;
-	
-	mainCam.transform.localEulerAngles = new Vector3(90f, 270f, 0f);
+	    //System.Buffer.BlockCopy(image.ToCharArray(), 0, bytes, 0, bytes.Length);
+		byte[] bytes = www.bytes;
+		
+		mainCam.transform.localEulerAngles = new Vector3(90f, 270f, 0f);
         //hide info stuff
         amountOfPeopleEscaped.gameObject.SetActive(false);
         amountOfPeopleLeft.gameObject.SetActive(false);
@@ -365,17 +639,20 @@ public class bringUpMenu : MonoBehaviour
 
     public void actuallyRestart()
    {
-      // Debug.Log("We are actualluy restarting");
-       FileScript.time = mytimer;
-       if (running == 1)
-       {
+		showAllUsersItems();
+		destroyAllBestHeatmapItems();
+
+		// Debug.Log("We are actualluy restarting");
+		FileScript.time = mytimer;
+		if (running == 1)
+		{
 		   
-		   //GameObject.Find("FileController").GetComponent<FileScript>().flag=true;
-           //GameObject.Find("FileController").GetComponent<FileScript>().createXML();
-           if (!GameObject.Find("FileController").GetComponent<FileScript>().flag)//XMLXML
-            GameObject.Find("FileController").GetComponent<FileScript>().createXML();//XMLXML
+			//GameObject.Find("FileController").GetComponent<FileScript>().flag=true;
+			//GameObject.Find("FileController").GetComponent<FileScript>().createXML();
+			if (!GameObject.Find("FileController").GetComponent<FileScript>().flag)//XMLXML
+				GameObject.Find("FileController").GetComponent<FileScript>().createXML();//XMLXML
         }
-       //Debug.Log("active scene: "+ SceneManager.GetActiveScene().name);
+        //Debug.Log("active scene: "+ SceneManager.GetActiveScene().name);
         GameObject[] walls = GameObject.FindGameObjectsWithTag("wall");
         foreach (GameObject wall in walls)
         {
@@ -414,7 +691,10 @@ public class bringUpMenu : MonoBehaviour
 
     public void restartWithSaved()
     {
-        //Debug.Log("we are restarting with saved");
+		showAllUsersItems();
+		destroyAllBestHeatmapItems();
+
+		//Debug.Log("we are restarting with saved");
         running = 0;
 
         //deactivate other menus
