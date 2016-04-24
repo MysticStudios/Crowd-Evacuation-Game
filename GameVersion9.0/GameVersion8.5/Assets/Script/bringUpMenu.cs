@@ -7,9 +7,12 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Events;
 using System.Linq;
 using System.Xml;
+using System;
+
 
 public class bringUpMenu : MonoBehaviour
 {
+    public float squareFactor;
     //for SHowData
     public Camera mainCamera;
     public Canvas menuWithEndMid;
@@ -86,7 +89,8 @@ public class bringUpMenu : MonoBehaviour
 	bool timeFlag=false;
 	public static float timeConst=0.0f;
 	public static float changeTimeConst=0.0f;
-	
+    public static float planearea;
+
     void Awake()
     {
        midmodalPanel = MidModalPanel.Instance();
@@ -483,6 +487,12 @@ public class bringUpMenu : MonoBehaviour
 		timeConst=0.0f;
         serviceMenu.enabled = false;
 		changeTimeConst=0.0f;
+
+        //plane are calculation
+
+        planearea= GameObject.FindGameObjectWithTag("floor").transform.localScale.x * GameObject.FindGameObjectWithTag("floor").transform.localScale.z *squareFactor;
+
+
         //if there are prevwalls, delete all other walls
         GameObject prevwall = GameObject.FindGameObjectWithTag("prevwall");
         if (prevwall != null)
@@ -793,6 +803,42 @@ public class bringUpMenu : MonoBehaviour
 
     public void clickedSubmit()
     {
+
+        int l = GameObject.Find("los").transform.GetChild(1).GetComponent<Dropdown>().value;
+        string los = GameObject.Find("los").transform.GetChild(1).GetComponent<Dropdown>().options[l].text;
+
+        int uppercount=0, lowercount=0;
+        
+        if(los.Contains("A"))
+        {
+            uppercount = Convert.ToInt32(0.27 * planearea);
+        }
+        else if(los.Contains("B"))
+        {
+            lowercount = Convert.ToInt32(0.31 * planearea);
+            uppercount = Convert.ToInt32(0.42 * planearea);
+        }
+        else if(los.Contains("C"))
+        {
+            lowercount = Convert.ToInt32(0.43 * planearea);
+            uppercount = Convert.ToInt32(0.72 * planearea);
+        }
+        else if(los.Contains("D"))
+        {
+            lowercount = Convert.ToInt32(0.73 * planearea);
+            uppercount = Convert.ToInt32(1.08 * planearea);
+        }
+        else if(los.Contains("E"))
+        {
+            lowercount = Convert.ToInt32(1.09 * planearea);
+            uppercount = Convert.ToInt32(2.17 * planearea);
+        }
+        else
+        {
+            lowercount = Convert.ToInt32(2.18 * planearea);
+            uppercount = Convert.ToInt32(2.5 * planearea);
+        }
+
         List<List<Transform>> tempListList = new List<List<Transform>>();
         List<Transform> wallList = new List<Transform>();
         List<Transform> doorList = new List<Transform>();
@@ -836,427 +882,8 @@ public class bringUpMenu : MonoBehaviour
         GameController.startSiren = true;
         setTimer = true;
 
-
-/*        walls = GameObject.FindGameObjectsWithTag("wall");
-        GameObject[] allWalls = new GameObject[walls.Length + outerWall.Length];
-            walls.CopyTo(allWalls, 0);
-            outerWall.CopyTo(allWalls, walls.Length);
-
-            List<List<Vector3>> rooms = new List<List<Vector3>>();
-
-            foreach (GameObject obj in allWalls)
-            {
-                List<Vector3> temp = new List<Vector3>();
-                foreach (GameObject obj1 in allWalls)
-                {
-                    if (!obj.Equals(obj1))
-                    {
-                    if (obj.transform.rotation.y == 0.0f && obj1.transform.rotation.y!=0.0f)
-                        {
-
-                        if (obj.transform.position.z > obj1.transform.position.z)
-                            {
-                            
-                            float right1 = obj.transform.position.x + (obj.transform.localScale.x / 2);
-                                float left1 = obj.transform.position.x - (obj.transform.localScale.x / 2);
-                                float top1 = obj.transform.position.z+ (obj.transform.localScale.z / 2); ;
-                                float bottom1 = obj.transform.position.z - (obj.transform.localScale.z / 2); 
-                                    float left2 = obj1.transform.position.z + (obj1.transform.localScale.x / 2);
-                                    float right2 = obj1.transform.position.z - (obj1.transform.localScale.x / 2);
-                                    float top2= obj1.transform.position.x + (obj1.transform.localScale.z / 2);
-                            float bottom2= obj1.transform.position.x - (obj1.transform.localScale.z / 2);
-
-                            
-                            if (obj1.tag == "outerWall")
-                            {
-                                if (right1 <= top2 && right1 >= bottom2 )
-                                {
-                                    
-                                    Vector3 p = new Vector3(right1, obj.transform.position.y, obj.transform.position.z);
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(obj1.transform.position.x, obj1.transform.position.y, left2-3f);
-                                    temp.Add(p1);
-                                }
-                                else if (left1 <= top2 && left1 >= bottom2 )
-                                {
-                                    
-                                    Vector3 p = new Vector3(left1, obj.transform.position.y, obj.transform.position.z);
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(obj1.transform.position.x, obj1.transform.position.y, left2 - 3f);
-                                    temp.Add(p1);
-                                }
-                            }
-                            else if (obj.tag == "outerWall")
-                            {
-                                if (obj1.tag == "outerWall")
-                                {
-                                    if (left1 <= top2 &&left1>=bottom2)
-                                    {
-                                        Vector3 p = new Vector3(left1, obj.transform.position.y, left2);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(left1, obj1.transform.position.y, left2-5f);
-                                        temp.Add(p1);
-                                    }
-                                    if (right1 <=top2 && right1>=bottom2)
-                                    {
-                                        Vector3 p = new Vector3(right1, obj.transform.position.y, left2);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(right1, obj1.transform.position.y, left2 - 5f);
-                                        temp.Add(p1);
-                                    }
-                                }
-                                else
-                                {
-                                    if (left2 <= top1 && left2 >= bottom1)
-                                    {
-                                        Vector3 p = new Vector3(obj1.transform.position.x, obj1.transform.position.y, left2);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(obj1.transform.position.x, obj1.transform.position.y, right2);
-                                        temp.Add(p1);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (left2 <= top1 && left2 >=bottom1 && obj1.transform.position.x>=left1 && obj1.transform.position.x <= right1)
-                                {
-                                    
-                                    Vector3 p = new Vector3(obj1.transform.position.x, obj1.transform.position.y, left2);
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(obj1.transform.position.x, obj1.transform.position.y, right2);
-                                    temp.Add(p1);
-                                }
-                               
-                            }
-                            }
-                            
-                        }
-                    else if(obj.transform.rotation.y != 0.0f && obj1.transform.rotation.y == 0.0f)
-                    {
-                        if (obj.transform.position.x > obj1.transform.position.x)
-                        {
-
-                            float right1 = obj.transform.position.z - (obj.transform.localScale.x / 2);
-                            float left1 = obj.transform.position.z + (obj.transform.localScale.x / 2);
-                            float top1 = obj.transform.position.x + (obj.transform.localScale.z / 2);
-                            float bottom1 = obj.transform.position.x - (obj.transform.localScale.z / 2);
-                            float left2 = obj1.transform.position.x - (obj1.transform.localScale.x / 2);
-                            float right2 = obj1.transform.position.x + (obj1.transform.localScale.x / 2);
-                            float top2 = obj1.transform.position.z + (obj1.transform.localScale.z / 2);
-                            float bottom2 = obj1.transform.position.z - (obj1.transform.localScale.z / 2);
-
-                            
-                            if (obj1.tag == "outerWall")
-                            {
-                                if (left1 <= top2 && left1 >= bottom2)
-                                {
-                                    
-                                    Vector3 p = new Vector3(obj.transform.position.x, obj.transform.position.y, left1);
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(left2-3f, obj1.transform.position.y, obj1.transform.position.z);
-                                    temp.Add(p1);
-                                }
-                                else if (right1 <= top2 && right1 >= bottom2)
-                                {
-                                    
-                                    Vector3 p = new Vector3(obj.transform.position.x, obj.transform.position.y, right1);
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(left2-3f, obj1.transform.position.y, obj1.transform.position.z);
-                                    temp.Add(p1);
-                                }
-                            }
-                            else if (obj.tag == "outerWall")
-                            {
-                                if (obj1.tag == "outerWall")
-                                {
-                                    if (left1 <= top2 && left1 >= bottom2)
-                                    {
-                                        Vector3 p = new Vector3(obj.transform.position.x, obj.transform.position.y, left1);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(right2-3f, obj.transform.position.y, left1);
-                                        temp.Add(p1);
-                                    }
-                                    if (right1 <= top2 && right1 >= bottom2)
-                                    {
-                                        Vector3 p = new Vector3(obj.transform.position.x, obj.transform.position.y, right1);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(right2-3f, obj1.transform.position.y, obj1.transform.position.z);
-                                        temp.Add(p1);
-                                    }
-                                }
-                                else
-                                {
-                                    if (right2 <= top1 && right2 >= bottom1)
-                                    {
-                                        Vector3 p = new Vector3(right2, obj1.transform.position.y, obj1.transform.position.z);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(left2, obj1.transform.position.y, obj1.transform.position.z);
-                                        temp.Add(p1);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (right2 <= top1 && right2 >= bottom1 && obj1.transform.position.z <= left1 && obj1.transform.position.z >= right1)
-                                {
-                                    
-                                    Vector3 p = new Vector3(right2, obj1.transform.position.y, obj1.transform.position.z);
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(left2, obj1.transform.position.y, obj1.transform.position.z);
-                                    temp.Add(p1);
-                                }
-                                
-                            }
-                        }
-                    }
-                    }
-            }
-            
-            rooms.Add(temp);
-            temp = new List<Vector3>();
-            foreach (GameObject obj1 in allWalls)
-            {
-                if (!obj.Equals(obj1))
-                {
-                    
-                    if (obj.transform.rotation.y == 0.0f && obj1.transform.rotation.y != 0.0f)
-                    {
-
-                        if (obj.transform.position.z < obj1.transform.position.z)
-                        {
-                            float right1 = obj.transform.position.x + (obj.transform.localScale.x / 2);
-                            float left1 = obj.transform.position.x - (obj.transform.localScale.x / 2);
-                            float top1 = obj.transform.position.z + (obj.transform.localScale.z / 2); ;
-                            float bottom1 = obj.transform.position.z - (obj.transform.localScale.z / 2); ;
-
-                            float left2 = obj1.transform.position.z + (obj1.transform.localScale.x / 2);
-                            float right2 = obj1.transform.position.z - (obj1.transform.localScale.x / 2);
-                            float top2 = obj1.transform.position.x + (obj1.transform.localScale.z / 2); ;
-                            float bottom2 = obj1.transform.position.x - (obj1.transform.localScale.z / 2); ;
-
-                            if (obj1.tag == "outerWall")
-                            {
-
-                                    if (right1 <= top2 && right1 >= bottom2)
-                                    {
-                                        Vector3 p = new Vector3(right1, obj.transform.position.y, obj.transform.position.z);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(obj1.transform.position.x, obj1.transform.position.y, right2+3f);
-                                        temp.Add(p1);
-                                    }
-                                    if (left1 <= top2 && left1 >= bottom2)
-                                    {
-                                        Vector3 p = new Vector3(left1, obj.transform.position.y, obj.transform.position.z);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(obj1.transform.position.x, obj1.transform.position.y, right2+3f);
-                                        temp.Add(p1);
-                                    }
-                                
-                            }
-                            else if(obj.tag=="outerWall")
-                            {
-                                if (obj1.tag == "outerWall")
-                                {
-                                    if (left1 <= top2 && left1 >= bottom2)
-                                    {
-                                        Vector3 p = new Vector3(left1, obj.transform.position.y, obj.transform.position.z);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(left1, obj.transform.position.y, right2 + 3f);
-                                        temp.Add(p1);
-                                    }
-                                    if (right1 <= top2 && right1 >= bottom2)
-                                    {
-                                        Vector3 p = new Vector3(right1, obj.transform.position.y, right1);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(right1, obj1.transform.position.y, right2 + 3f);
-                                        temp.Add(p1);
-                                    }
-                                }
-                                else
-                                {
-                                    if (right2 <= top1 && right2 >= bottom1)
-                                    {
-                                        Vector3 p = new Vector3(obj1.transform.position.x, obj1.transform.position.y, right2);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(obj1.transform.position.x, obj1.transform.position.y, left2);
-                                        temp.Add(p1);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (right2 <= top1 && right2 >= bottom1 && obj1.transform.position.x >= left1 && obj1.transform.position.x <= right1)
-                                {
-                                    
-                                    Vector3 p = new Vector3(obj1.transform.position.x, obj1.transform.position.y,right2 );
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(obj1.transform.position.x, obj1.transform.position.y, left2);
-                                    temp.Add(p1);
-                                }
-                                
-                            }
-                        }
-                    }
-                    else if (obj.transform.rotation.y != 0.0f && obj1.transform.rotation.y == 0.0f)
-                    {
-                        if (obj.transform.position.x < obj1.transform.position.x)
-                        {
-                            float right1 = obj.transform.position.z - (obj.transform.localScale.x / 2);
-                            float left1 = obj.transform.position.z + (obj.transform.localScale.x / 2);
-                            float top1 = obj.transform.position.x + (obj.transform.localScale.z / 2); ;
-                            float bottom1 = obj.transform.position.x - (obj.transform.localScale.z / 2); ;
-
-                            float left2 = obj1.transform.position.x - (obj1.transform.localScale.x / 2);
-                            float right2 = obj1.transform.position.x + (obj1.transform.localScale.x / 2);
-                            float top2 = obj1.transform.position.z + (obj1.transform.localScale.z / 2); ;
-                            float bottom2 = obj1.transform.position.z - (obj1.transform.localScale.z / 2); ;
-
-                            if (obj1.tag == "outerWall")
-                            {
-
-                                if (right1 <= top2 && right1 >= bottom2)
-                                {
-                                    Vector3 p = new Vector3(obj.transform.position.x, obj.transform.position.y, right1);
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(left2 + 3f, obj1.transform.position.y, obj1.transform.position.z);
-                                    temp.Add(p1);
-                                }
-                                if (left1 <= top2 && left1 >= bottom2)
-                                {
-                                    Vector3 p = new Vector3(obj.transform.position.x, obj.transform.position.y, left1);
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(left2 + 3f, obj1.transform.position.y, obj1.transform.position.z);
-                                    temp.Add(p1);
-                                }
-
-                            }
-                            else if (obj.tag == "outerWall")
-                            {
-                                if (obj1.tag == "outerWall")
-                                {
-                                    if (left1 <= top2 && left1 >= bottom2)
-                                    {
-                                        Vector3 p = new Vector3(obj.transform.position.x, obj.transform.position.y, left1);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(left2 + 3f, obj.transform.position.y, obj.transform.position.z);
-                                        temp.Add(p1);
-                                    }
-                                    if (right1 <= top2 && right1 >= bottom2)
-                                    {
-                                        Vector3 p = new Vector3(obj.transform.position.x, obj.transform.position.y, right1);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(left2 + 3f, obj1.transform.position.y, obj.transform.position.z);
-                                        temp.Add(p1);
-                                    }
-                                }
-                                else
-                                {
-                                    if (left2 <= top1 && left2 >= bottom1)
-                                    {
-                                        Vector3 p = new Vector3(left2, obj1.transform.position.y, obj1.transform.position.z);
-                                        temp.Add(p);
-                                        Vector3 p1 = new Vector3(right2, obj1.transform.position.y, obj1.transform.position.z);
-                                        temp.Add(p1);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if (left2 <= top1 && left2 >= bottom1 && obj1.transform.position.z <= left1 && obj1.transform.position.z >= right1)
-                                {
-                                    
-                                    Vector3 p = new Vector3(left2, obj1.transform.position.y, obj1.transform.position.z);
-                                    temp.Add(p);
-                                    Vector3 p1 = new Vector3(right2, obj1.transform.position.y, obj1.transform.position.z);
-                                    temp.Add(p1);
-                                }
-                                
-                            }
-                        }
-
-                    }
-                }
-            }
-            rooms.Add(temp);
-        }
-        
-
-        //System.Random r = new System.Random();
-        int ranFlag = 0;
-
-        if (!Input.GetKeyDown("space"))
-        foreach (List<Vector3> room in rooms)
-        {
-            
-            if (room.Count >2)
-            {
-                float x, z;
-
-                        x = Mathf.Abs(room[0].x - room[2].x) / 2;
-
-                        if (room[0].x >= room[2].x)
-                            x = room[2].x + x;
-                        else
-                            x = room[0].x + x;
-
-                        z = Mathf.Abs(room[1].z - room[0].z) / 2;
-
-                        if (room[0].z >= room[1].z)
-                            z = room[1].z + z;
-                        else
-                            z = room[0].z + z;
-
-
-                    /* GameObject[] targets = GameObject.FindGameObjectsWithTag("destinations");
-                         int loc = r.Next(1, targets.Length);
-
-                                 if (ranFlag < targets.Length)
-                                 {
-
-                                 loc = loc + ranFlag++;
-
-                                 }
-                                 else if(ranFlag==targets.Length)
-                                 {
-
-                                 ranFlag = 0;
-                                 loc = loc + ranFlag;
-
-
-                             }
-							 
-
-                    float count = 0.0f;
-                    for (int i = 0; i < NoOfAgents; i++)
-                    {
-                        GameObject agent = Instantiate(agentObj);
-                        agent.SetActive(true);
-                        //agent.GetComponent<NavigationController>().loc=loc;
-                        if(i%2==0)
-                        agent.GetComponent<NavigationController>().startPosition = new Vector3(x+count, room[0].y, z-count);
-                        else if(i%3==0)
-                            agent.GetComponent<NavigationController>().startPosition = new Vector3(x-count, room[0].y, z+count);
-                        else if(i%4==0)
-                            agent.GetComponent<NavigationController>().startPosition = new Vector3(x - count , room[0].y, z - count);
-                        else
-                            agent.GetComponent<NavigationController>().startPosition = new Vector3(x + count, room[0].y, z + count);
-
-                        count = count + 0.1f;
-                    }
-                    
-            }
-        }*/
-
 		if (!Input.GetKeyDown("space")){
-		GameObject[] objects = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
 
-                        foreach (GameObject g in objects)
-                        {
-                            if (g.tag == "agent")
-                            {
-                                g.SetActive(true);
-                            }
-                        }
 		
 		walls = GameObject.FindGameObjectsWithTag("wall");
 		
@@ -1269,11 +896,11 @@ public class bringUpMenu : MonoBehaviour
 				{
 					GameObject agent=Instantiate(agentObj);
 					agent.AddComponent<newagentscript>();
-					agent.active=true;
+					agent.SetActive(false);
 					agent.GetComponent<NavigationController>().startPosition = new Vector3(wall.transform.position.x, wall.transform.position.y, wall.transform.position.z-1.0f);
 					agent=Instantiate(agentObj);
 					agent.AddComponent<newagentscript>();
-					agent.active=true;
+					agent.SetActive(false);
 					agent.GetComponent<NavigationController>().startPosition = new Vector3(wall.transform.position.x, wall.transform.position.y, wall.transform.position.z+1.0f);
 					
 				}
@@ -1281,16 +908,58 @@ public class bringUpMenu : MonoBehaviour
 				{
 					GameObject agent=Instantiate(agentObj);
 					agent.AddComponent<newagentscript>();
-					agent.active=true;
+					agent.SetActive(false);
 					agent.GetComponent<NavigationController>().startPosition = new Vector3(wall.transform.position.x-1.0f, wall.transform.position.y, wall.transform.position.z);
 					agent=Instantiate(agentObj);
 					agent.AddComponent<newagentscript>();
-					agent.active=true;
+					agent.SetActive(false);
 					agent.GetComponent<NavigationController>().startPosition = new Vector3(wall.transform.position.x+1.0f, wall.transform.position.y, wall.transform.position.z);
 				}
 			}
 		}
-		}
+
+            GameObject[] objects = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
+            System.Random r = new System.Random();
+            int count = 0;
+            int spawnCount = r.Next(lowercount, uppercount);
+            foreach (GameObject g in objects)
+            {
+                if (g.tag == "agent")
+                {
+                    if (count == spawnCount)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        count++;
+                        g.SetActive(true);
+                    }
+                }
+            }
+
+            if(count<spawnCount)
+            {
+                System.Random rd = new System.Random();
+                Transform floorplane = GameObject.FindGameObjectWithTag("floor").transform;
+                double xleft = floorplane.position.x - floorplane.localScale.x / 2;
+                double xright= floorplane.position.x + floorplane.localScale.x / 2;
+                double ztop=floorplane.position.z+floorplane.localScale.z/2;
+                double zbottom=floorplane.position.z-floorplane.localScale.z/2;
+                for (int i=0;i<(spawnCount-count);i++)
+                {
+                    GameObject agent = Instantiate(agentObj);
+                    agent.AddComponent<newagentscript>();
+                    agent.SetActive(true);
+
+                    agent.GetComponent<NavigationController>().startPosition = new Vector3(Convert.ToSingle((rd.NextDouble()*(xright-xleft))+xleft), floorplane.position.y, Convert.ToSingle((rd.NextDouble() * (ztop - zbottom)) + zbottom));
+
+                }
+            }
+            Debug.Log("hey bro "+spawnCount);
+
+
+        }
 		GameController.dont = true;
 
     }
