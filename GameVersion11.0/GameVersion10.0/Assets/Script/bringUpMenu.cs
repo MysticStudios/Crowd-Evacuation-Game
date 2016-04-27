@@ -936,7 +936,7 @@ public class bringUpMenu : MonoBehaviour
 
             if (running==0&&!pause)
             {
-                if (Input.GetKeyDown("space")&& !noList)
+                if (Input.GetKeyDown("space")&& !noList &&!crowdflag)
                 {
                     menuEnabled = !menuEnabled;
 					GameObject[] objects = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
@@ -1094,13 +1094,14 @@ public class bringUpMenu : MonoBehaviour
         crowdflag = true;
         menuEnabled = false;
         menu.enabled = false;
+        Camera.main.GetComponent<MouseLook>().enabled = false;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
     }
 
     public void clickedSubmit()
     {
-
+        crowdflag = false;
         int l = GameObject.Find("los").transform.GetChild(1).GetComponent<Dropdown>().value;
         string los = GameObject.Find("los").transform.GetChild(1).GetComponent<Dropdown>().options[l].text;
 
