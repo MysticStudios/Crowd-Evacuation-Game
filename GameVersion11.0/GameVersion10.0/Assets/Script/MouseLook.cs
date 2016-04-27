@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 /// MouseLook rotates the transform based on the mouse delta.
 /// Minimum and Maximum values can be used to constrain the possible rotation
@@ -28,10 +29,44 @@ public class MouseLook : MonoBehaviour {
 	public float minimumY = -60F;
 	public float maximumY = 60F;
 
+    GameObject msg;
+
+    int timer = 0;
+
 	float rotationY = 0F;
 
 	void Update ()
 	{
+        timer--;
+
+        if (timer == 0)
+        {
+            msg.GetComponentInChildren<Text>().text = "";
+            msg.SetActive(false);
+        }
+
+        if(Input.GetKey(KeyCode.X))
+        {
+           if(sensitivityX<20 && sensitivityY<20)
+            {
+                sensitivityX = sensitivityX + 1;
+                sensitivityY = sensitivityY + 1;
+                msg.SetActive(true);
+                msg.GetComponentInChildren<Text>().text = "Mouse Sensitivity increased";
+                timer = 100;
+            }
+        }
+        else if(Input.GetKey(KeyCode.Y))
+        {
+            if(sensitivityX>3 && sensitivityY>3)
+            {
+                sensitivityX = sensitivityX - 1;
+                sensitivityY = sensitivityY - 1;
+                msg.SetActive(true);
+                msg.GetComponentInChildren<Text>().text = "Mouse Sensitivity decreased";
+                timer = 100;
+            }
+        }
 		if (axes == RotationAxes.MouseXAndY)
 		{
 			float rotationX = transform.localEulerAngles.y + Input.GetAxis("Mouse X") * sensitivityX;
@@ -56,8 +91,19 @@ public class MouseLook : MonoBehaviour {
 	
 	void Start ()
 	{
-		// Make the rigid body not change rotation
-		/*if (rigidbody)
+        timer = 0;
+        // Make the rigid body not change rotation
+        /*if (rigidbody)
 			rigidbody.freezeRotation = true;*/
-	}
+        GameObject[] objects = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
+
+        foreach (GameObject g in objects)
+        {
+            if (g.name == "ErrorText")
+            {
+                msg = g;
+
+            }
+        }
+    }
 }
