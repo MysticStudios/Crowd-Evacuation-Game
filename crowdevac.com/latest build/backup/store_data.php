@@ -14,23 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	
 	$xmlfile = fopen("./XMLDocs/". $scene . ".xml", "r");
 	$xmlstring = fread($xmlfile,filesize("./XMLDocs/" . $scene . ".xml"));
-	
-	$mintime=INF;
-	$leader="";
-	$loadedxml=simplexml_load_file("./XMLDocs/" . $scene . ".xml");
-	
-	foreach ($loadedxml as $userdata):
-        $player_id=$userdata->{"Player-ID"};
-        $telap=floatval($userdata->{"Time-Elapsed"});
-		
-		if($telap<=$mintime)
-		{
-			$mintime=$telap;
-			$leader=$player_id;
-		}
-    endforeach;
-	
-	echo $leader . "+" . $mintime;
+	echo $xmlstring;
 }
 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	if (!isset($_POST['scene']) || empty($_POST['scene'])) {
