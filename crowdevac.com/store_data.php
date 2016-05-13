@@ -41,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	}
 }
 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	4if (!isset($_POST['scene']) || empty($_POST['scene'])) {
+	if (!isset($_POST['scene']) || empty($_POST['scene'])) {
 		exit(0);
 	}
 	if (!isset($_POST['querystring']) || empty($_POST['querystring'])){
