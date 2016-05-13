@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$thomo=$userdata->{"Homogeneity"};
 		$tloa=$userdata->{"LevelOfAggression"};
 
-		if($telap<=$mintime && strcmp($tloa,$loa)==0 && strcmp($tlos,$los)==0 && strcmp($homo,$thomo)==0) {
+		if($telap<=$mintime && $tloa===$loa && $tlos===$los && $homo===$thomo) {
 			$mintime=$telap;
 			$minXML = $userdata;
 		}
