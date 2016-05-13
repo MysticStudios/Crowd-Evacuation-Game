@@ -393,9 +393,15 @@ public class bringUpMenu : MonoBehaviour
         XmlDocument doc = new XmlDocument();
 
         doc.LoadXml(xml);
-
-        foreach (XmlNode node in doc.ChildNodes)
+        XmlNode userdata = doc.FirstChild;
+        foreach (XmlNode node in userdata.ChildNodes)
         {
+            Debug.Log(node.Name);
+            if (node.Name == "Run-ID")
+            {
+                runId = node.InnerText;
+             }
+
             if (node.Name == "Walls")
             {
                 // for each wall
@@ -899,7 +905,7 @@ public class bringUpMenu : MonoBehaviour
     {
         if(Camera.main.GetComponent<makeDoor>().enabled == false && Camera.main.GetComponent<makePillar>().enabled == false && Camera.main.GetComponent<makeWall>().enabled == false)
         {
-            if((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))&&(menuEnabled==false && serviceMenu.enabled==false))
+            if((Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1))&&(menuEnabled==false && serviceMenu.enabled==false&&GameObject.Find("midGame") ==null))
             {
                 GameObject[] objects = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
                 foreach (GameObject g in objects)
@@ -961,9 +967,31 @@ public class bringUpMenu : MonoBehaviour
                 noList = true;
                 Camera.main.GetComponent<MouseLook>().enabled = false;
                 midmodalPanel.Choice(restart, quit);
+                GameObject[] objects = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
+
+                foreach (GameObject g in objects)
+                {
+                    if (g.name == "ErrorText")
+                    {
+                        g.GetComponentInChildren<Text>().text = "";
+                        g.SetActive(false);
+
+                    }
+                }
+                
             }
             else
             {
+                GameObject[] objects = Resources.FindObjectsOfTypeAll(typeof(GameObject)) as GameObject[];
+
+                foreach (GameObject g in objects)
+                {
+                    if (g.name == "ErrorText")
+                    {
+                        g.SetActive(true);
+
+                    }
+                }
                 midmodalPanel.ClosePanel();
                 if (!crowdflag)
                     noList = false;
