@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$tlos=$userdata->{"LevelOfService"};
 		$thomo=$userdata->{"Homogeneity"};
 		$tloa=$userdata->{"LevelOfAggression"};
-echo "<h1>"."hello".substr($tlos,1, 1).substr($los,1, 1)."</h1>";
+echo "<h1>"."hello".substr($tlos,0, 1).substr($los,0, 1)."</h1>";
 		if($telap<=$mintime && $tloa==$loa && substr($tlos,0, 1)==substr($los,0, 1) && $homo==$thomo) {
 			$mintime=$telap;
 			$minXML = $userdata;
