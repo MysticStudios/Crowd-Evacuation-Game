@@ -24,10 +24,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$minXML = "";
 
 	foreach ($loadedxml as $userdata):
-		if (empty($minXML)) {
-			$minXML = $userdata;
-		}
-
 	        $telap=floatval($userdata->{"Time-Elapsed"});
 		$tlos=$userdata->{"LevelOfService"};
 		$thomo=$userdata->{"Homogeneity"};
