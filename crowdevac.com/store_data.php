@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 		$thomo=$userdata->{"Homogeneity"};
 		$tloa=$userdata->{"LevelOfAggression"};
 		
-		if($telap<=$mintime && $tloa===$loa && $tlos===$los && $homo===$thomo)
+		if($telap<=$mintime && $tloa===$loa && substr($tlos,0, 1)==substr($los,0, 1) && $homo===$thomo)
 		{
 			$mintime=$telap;
 			$leader=$player_id;
