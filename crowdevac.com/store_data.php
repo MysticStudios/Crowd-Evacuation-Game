@@ -6,6 +6,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	}
 	
 	$scene = filterAlphanumeric($_GET["scene"]);
+	$loa = filterAlphanumeric($_GET["loa"]);
+	$los = filterAlphanumeric($_GET["los"]);
+	$homo = filterAlphanumeric($_GET["homo"]);
 	
 	// create XML file for current scvene if it doesn't yet exist
 	if (!file_exists("./XMLDocs/". $scene . ".xml"))	{
@@ -22,8 +25,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 	foreach ($loadedxml as $userdata):
         $player_id=$userdata->{"Player-ID"};
         $telap=floatval($userdata->{"Time-Elapsed"});
+		$tlos=$userdata->{"LevelOfService"};
+		$thomo=$userdata->{"Homogeneity"};
+		$tloa=$userdata->{"LevelOfAggression"};
 		
-		if($telap<=$mintime)
+		if($telap<=$mintime && strcmp($tloa,$loa)==0 && strcmp($tlos,$los)==0 && strcmp($homo,$thomo)==0)
 		{
 			$mintime=$telap;
 			$leader=$player_id;
