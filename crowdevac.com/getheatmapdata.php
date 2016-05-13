@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$xmlfile = fopen("./XMLDocs/". $scene . ".xml", "r");
 	$xmlstring = fread($xmlfile,filesize("./XMLDocs/" . $scene . ".xml"));
 
-	$mintime=PHP_INT_MAX;
+	$mintime=INF;
 	$leader="";
         $loadedxml=simplexml_load_file("./XMLDocs/" . $scene . ".xml");
 	$minXML = "";
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		$thomo=$userdata->{"Homogeneity"};
 		$tloa=$userdata->{"LevelOfAggression"};
 
-		if($telap<=$mintime && $tloa==$loa && $tlos==$los && $homo==$thomo) {
+		if($telap<=$mintime && strcmp($tloa,$loa)==0 && strcmp($tlos,$los)==0 && strcmp($homo,$thomo)==0) {
 			$mintime=$telap;
 			$minXML = $userdata;
 		}
