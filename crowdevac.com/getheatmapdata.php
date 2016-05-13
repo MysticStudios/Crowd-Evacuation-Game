@@ -35,6 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 		}
 	endforeach;
 
+	if($mintime!=PHP_INT_MAX)
 	echo $minXML->asXML();
 }
 
