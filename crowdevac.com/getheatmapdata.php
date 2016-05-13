@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 	$xmlfile = fopen("./XMLDocs/". $scene . ".xml", "r");
 	$xmlstring = fread($xmlfile,filesize("./XMLDocs/" . $scene . ".xml"));
 
-	$mintime=INF;
+	$mintime=PHP_INT_MAX;
 	$leader="";
         $loadedxml=simplexml_load_file("./XMLDocs/" . $scene . ".xml");
 	$minXML = "";
