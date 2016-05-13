@@ -396,9 +396,6 @@ public class bringUpMenu : MonoBehaviour
 
         foreach (XmlNode node in doc.ChildNodes)
         {
-			if (node.Name == "Run-ID") {
-				runId = node.InnerText;
-			}
             if (node.Name == "Walls")
             {
                 // for each wall

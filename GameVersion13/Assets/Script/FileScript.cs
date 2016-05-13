@@ -42,7 +42,7 @@ public class FileScript : MonoBehaviour
         {
 
             flag = true;
-                Debug.Log("no xml file yet");
+               // Debug.Log("no xml file yet");
 				//WebClient web=new WebClient();
 				//web.Credentials = new System.Net.NetworkCredential("username", "password");
 				//String xml=web.DownloadString(new Uri("https://crowdevac.com/XMLUserData/"+ SceneManager.GetActiveScene().name + ".xml"));
@@ -65,6 +65,7 @@ public class FileScript : MonoBehaviour
                 XmlNode userdata = doc.CreateElement("User-Data");
                 document.AppendChild(userdata);
 
+            Debug.Log(nameStore.name);
                 XmlNode playerid = doc.CreateElement("Player-ID");
                 playerid.InnerText=nameStore.name;
                 userdata.AppendChild(playerid);

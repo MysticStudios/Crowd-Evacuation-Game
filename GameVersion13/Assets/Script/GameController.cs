@@ -195,16 +195,15 @@ public class GameController : MonoBehaviour {
             Camera.main.gameObject.GetComponent<MouseLook>().enabled = false;
             Camera.main.gameObject.GetComponent<bringUpMenu>().enabled = false;
 
-			
-            FileScript.time = bringUpMenu.mytimer;
-			if(!FileController.GetComponent<FileScript>().flag)//XMLXML
-            FileController.GetComponent<FileScript>().createXML();//XMLXML
+
 			
 			if(!countFlag){
 				// Debug.Log("hello "+bringUpMenu.subTime);
 				//Debug.Log("hellohello "+bringUpMenu.mytimer);
 			bringUpMenu.mytimer = (bringUpMenu.mytimer + bringUpMenu.subTime*10)*0.0165f;
-			countFlag=true;
+                if (!FileController.GetComponent<FileScript>().flag)//XMLXML
+                    FileController.GetComponent<FileScript>().createXML();
+                        countFlag =true;
 			}
             modalPanel.Choice(bringUpMenu.mytimer.ToString(),next,replay,quit);//bringUpMenu.mytimer.ToString()
 

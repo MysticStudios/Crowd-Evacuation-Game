@@ -34,17 +34,18 @@ public class leaderScript : MonoBehaviour {
                     Stream stream=response.GetResponseStream();
                     StreamReader reader = new StreamReader(stream, Encoding.UTF8);
                     string xml = reader.ReadToEnd();*/
-            string url = "http://crowdevac.com/store_data.php?scene=Level" + i.ToString();
+           string url = "http://crowdevac.com/store_data.php?scene=Level" + i.ToString();
             //string url="http://localhost/store_data.php?scene=Level"+i.ToString();
             WWW www = new WWW(url);
             yield return www;
             string xml = www.text;
-
+            Debug.Log(xml);
             if (xml != null) { 
             string[] xmlarr = xml.Split('+');
                 Debug.Log(xmlarr.Length);
 
                 playername = xmlarr[0];
+                Debug.Log(xmlarr[1]);
             mintime = System.Single.Parse(xmlarr[1]);
         }
         /*XmlDocument doc = new XmlDocument();
