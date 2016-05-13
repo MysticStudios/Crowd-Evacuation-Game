@@ -36,10 +36,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 		}
     endforeach;
 	
+	if($mintime!=PHP_INT_MAX){
 	echo $leader . "+" . $mintime;
+	}
 }
 else if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-	if (!isset($_POST['scene']) || empty($_POST['scene'])) {
+	4if (!isset($_POST['scene']) || empty($_POST['scene'])) {
 		exit(0);
 	}
 	if (!isset($_POST['querystring']) || empty($_POST['querystring'])){
