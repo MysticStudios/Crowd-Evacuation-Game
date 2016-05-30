@@ -390,6 +390,7 @@ public class bringUpMenu : MonoBehaviour
         WWW www = new WWW(url,loginform);
         yield return www;
         string xml = www.text;
+        Debug.Log(xml);
         XmlDocument doc = new XmlDocument();
 
         doc.LoadXml(xml);

@@ -56,12 +56,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -175,6 +169,7 @@
     <Compile Include="Assets\Script\changeCameraMode.cs" />
     <Compile Include="Assets\Script\checkActive.cs" />
     <Compile Include="Assets\Script\collectResults.cs" />
+    <Compile Include="Assets\Script\datapassing.cs" />
     <Compile Include="Assets\Script\doorOpeningScript.cs" />
     <Compile Include="Assets\Script\firescript.cs" />
     <Compile Include="Assets\Script\heatMapControls.cs" />

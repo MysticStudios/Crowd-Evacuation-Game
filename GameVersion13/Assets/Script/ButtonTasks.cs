@@ -47,7 +47,7 @@ public class ButtonTasks : MonoBehaviour {
     }
     public void leaderboardEnter()
     {
-        SceneManager.LoadScene("LeaderBoard");
+        SceneManager.LoadScene("LeaderBoardDropDown");
     }
     public void architect()
     {
@@ -61,6 +61,7 @@ public class ButtonTasks : MonoBehaviour {
     public void backscript()
     {
         DestroyObject(GameObject.Find("Game"));
+        DestroyObject(GameObject.Find("Value"));
         SceneManager.LoadScene("Start");
     }
 	public void enterName()

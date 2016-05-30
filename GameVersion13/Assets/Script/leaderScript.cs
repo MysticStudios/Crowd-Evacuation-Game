@@ -15,6 +15,7 @@ public class leaderScript : MonoBehaviour {
     public Text pname;
     public Text score;
     public GameObject panel;
+    public string los, loa, homo;
 
     string playername;
     float mintime = System.Single.PositiveInfinity;
@@ -34,7 +35,8 @@ public class leaderScript : MonoBehaviour {
                     Stream stream=response.GetResponseStream();
                     StreamReader reader = new StreamReader(stream, Encoding.UTF8);
                     string xml = reader.ReadToEnd();*/
-           string url = "http://crowdevac.com/store_data.php?scene=Level" + i.ToString();
+            Debug.Log(datapassing.los+" "+datapassing.loa+" "+datapassing.homo);
+           string url = "http://crowdevac.com/store_data.php?scene=Level" + i.ToString()+"&los="+datapassing.los+"&loa="+datapassing.loa+"&homo="+datapassing.homo;
             //string url="http://localhost/store_data.php?scene=Level"+i.ToString();
             WWW www = new WWW(url);
             yield return www;
@@ -45,7 +47,7 @@ public class leaderScript : MonoBehaviour {
                 Debug.Log(xmlarr.Length);
 
                 playername = xmlarr[0];
-                Debug.Log(xmlarr[1]);
+                Debug.Log(xmlarr[0]);
             mintime = System.Single.Parse(xmlarr[1]);
         }
         /*XmlDocument doc = new XmlDocument();
@@ -99,4 +101,5 @@ public class leaderScript : MonoBehaviour {
 	void Update () {
 	
 	}
+
 }
