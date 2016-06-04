@@ -31,13 +31,14 @@ public class datapassing : MonoBehaviour {
     {
         int l = GameObject.Find("los").transform.GetChild(1).GetComponent<Dropdown>().value;
         datapassing.los = GameObject.Find("los").transform.GetChild(1).GetComponent<Dropdown>().options[l].text;
+		Debug.Log("hey" +datapassing.los);
 
         l = GameObject.Find("loa").transform.GetChild(1).GetComponent<Dropdown>().value;
         datapassing.loa = GameObject.Find("loa").transform.GetChild(1).GetComponent<Dropdown>().options[l].text;
-
+Debug.Log(datapassing.loa);
         l = GameObject.Find("homo").transform.GetChild(1).GetComponent<Dropdown>().value;
         datapassing.homo = GameObject.Find("homo").transform.GetChild(1).GetComponent<Dropdown>().options[l].text;
-
+Debug.Log(datapassing.homo);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
 
     }
